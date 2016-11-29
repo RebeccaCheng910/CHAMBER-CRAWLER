@@ -1,10 +1,9 @@
 #include <iostream>
 
 class Object {
-  int row, col;
-  ObjectType type;
+  int row = 0;
+  int col = 0;
 public: 
   Object(); // constructor
-  ~Object():  // destructor
-  setCords(int, int);  // set an object's col and row
+  //setCords(int, int);  // set an object's col and row
 };
