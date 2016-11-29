@@ -10,7 +10,7 @@ Floor::Floor(istream *in) {
 //    vector <Object> v;
 //    theGrid.emplace_back(v);
 //    for (int j = 0; j < col; ++j) {
-  td = new TextDisplay(in);
+  std::unique_ptr<TextDisplay> td(new TextDisplay(in));
 } 
 
 Floor::~Floor() {
