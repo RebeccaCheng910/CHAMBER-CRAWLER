@@ -1,5 +1,5 @@
 #include "object.h"
 
-Object::Object() {
+Object::Object(int row, int col, char type):row{row}, col{col}, objectType{type} {
 }
 

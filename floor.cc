@@ -8,6 +8,7 @@ using namespace std;
 
 // constructor 
 Floor::Floor(istream *in) {
+  td = new TextDisplay{in};
   // initilize default objects without populated items
   for (int i = 0; i < row; ++i) {
     vector <unique_ptr<Object>> v;
@@ -16,16 +17,15 @@ Floor::Floor(istream *in) {
     string line;
     getline(*in, line);
     for (int j = 0; j < col; ++j) {
-      theGrid[i].emplace_back(make_unique<Object>());
+      char c;
+      if (line[j] != '-' || line[j] != '|' || line[j] != ' ' || line[j] != '#' || line[j] != '.'){ 
+        c = '.';
+      } else {
+        c = line[j];
+      }
+      theGrid[i].emplace_back(make_unique<Object>(i,j,c));
     }
-}
-
-//  char c;
-//  for (int i = 0; i < row; ++i) {
-//    vector <Object> v;
-//    theGrid.emplace_back(v);
-//    for (int j = 0; j < col; ++j) {
-  auto td = make_unique <TextDisplay>(in);
+  }
 } 
 
 Floor::~Floor() {
