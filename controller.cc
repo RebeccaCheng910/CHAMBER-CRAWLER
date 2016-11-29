@@ -12,7 +12,7 @@ Controller::Controller() {
 
 void Controller::startGame(string filename) {
   istream *in = new ifstream(filename.c_str());
-  floor = new Floor{in};
+  auto floor = make_unique <Floor>(in);
 }
 
 Controller::~Controller() {
