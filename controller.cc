@@ -12,7 +12,7 @@ Controller::Controller() {
 
 void Controller::startGame(string filename) {
   istream *in = new ifstream(filename.c_str());
-  unique_ptr<Floor> floor(new Floor{in});
+  unique_ptr<Floor> floor(new Floor(in));
 }
 
 Controller::~Controller() {
