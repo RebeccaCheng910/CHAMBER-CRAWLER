@@ -10,7 +10,7 @@ Floor::Floor(istream *in) {
 //    vector <Object> v;
 //    theGrid.emplace_back(v);
 //    for (int j = 0; j < col; ++j) {
-  auto td = make_shared <TextDisplay>(in);
+  auto td = make_unique <TextDisplay>(in);
 } 
 
 Floor::~Floor() {
