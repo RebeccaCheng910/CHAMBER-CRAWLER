@@ -1,1 +1,2 @@
-floor.o: floor.cc floor.h textdisplay.h object.h
+floor.o: floor.cc floor.h textdisplay.h object.h objectType.h chamber.h \
+ info.h
