@@ -1,30 +1,28 @@
-void Controller::printFloor() {
- 65   cout << *floor << endl;
- 66   cout << "Race: " << pc->type << " Gold: " << pc.goldValue <<
- 67   "                                                  Floor " << floorNum <<     endl;
- 68   cout << "HP: " << pc->HP << endl;
- 69   cout << "Atk: " << pc->atk << endl;
- 70   cout << "Def: " << pc->def << endl;
- 71   cout << "Action " << pc->action << endl;
- 72   pc.action = "";
- 73 }
+Controller::printFloor() {
+    cout << *floor << endl;
+    cout << "Race: " << pc->type << " Gold: " << pc.goldValue <<"                                                  Floor " << floorNum <<     endl;
+    cout << "HP: " << pc->HP << endl;
+    cout << "Atk: " << pc->atk << endl;
+    cout << "Def: " << pc->def << endl;
+    cout << "Action " << pc->action << endl;
+    pc.action = "";
+}
 
-
- 75 bool Controller::gameOver() {
- 76   if (pc->HP == 0) {   // pc's health reaches 0
- 77     cout << "You are dead." << endl;
- 78     cout << "Enter 'r' to restart or 'q' to quit." << endl;
- 79     return true;
- 80   }
- 81   else if (floorNum > 5) {   // pc reached stairs on floor 5
- 82     cout << "You won! Congratulations :)" << endl;
- 83     int score = pc->goldValue;
- 84     if (pc->getinfo().type == "Shade") {
- 85       score *= 1.5;
- 86     }
- 87     cout << "Score : " << score  << endl;
- 88     cout << "Enter 'r' to restart or 'q' to quit." << endl;
- 89     return true;
- 90   }
- 91   return false;
- 92 }
+bool Controller::gameOver() {
+    if (pc->HP == 0) {   // pc's health reaches 0
+        cout << "You are dead." << endl;
+        cout << "Enter 'r' to restart or 'q' to quit." << endl;
+        return true;
+    }
+    else if (floorNum > 5) {   // pc reached stairs on floor 5
+        cout << "You won! Congratulations :)" << endl;
+        int score = pc->goldValue;
+        if (pc->getinfo().type == "Shade") {
+          score *= 1.5;
+        }
+    cout << "Score : " << score  << endl;
+    cout << "Enter 'r' to restart or 'q' to quit." << endl;
+    return true;
+    }
+    return false;
+}
