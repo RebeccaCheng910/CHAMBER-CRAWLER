@@ -19,7 +19,7 @@ const int numChambers = 5;
 Floor::Floor(string filename) {
   ifstream file(filename); // opens the file and read
   istream *in = new ifstream(filename.c_str()); // read in file
-  td = new TextDisplay{in};
+  td = make_shared<TextDisplay>(in);
   // initialize vector of chamber pointers
   for (int i = 0; i < numChambers; ++i) {
     theChambers.emplace_back(make_unique<Chamber>());
@@ -54,9 +54,7 @@ Floor::Floor(string filename) {
   findChamber();
 } 
 
-Floor::~Floor() {
-  delete td;
-} 
+Floor::~Floor() {} 
 
 // set Floor's PC, pass by reference
 void Floor::setPlayer(shared_ptr<Player> &playerCharacter) {
@@ -92,8 +90,10 @@ void Floor::findWall(int chamberNum,int i, int j) {
   findWall(chamberNum, i, j+1); /// find right
 }
   
-
-
+// check character in td given row and col
+char Floor::getTD (int x, int y) {
+	return td->getTD(x, y);
+}
 
 
 // output floor

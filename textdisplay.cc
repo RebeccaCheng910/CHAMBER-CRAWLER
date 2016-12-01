@@ -26,6 +26,9 @@ TextDisplay::TextDisplay(istream *in) {
   }
 }
 
+char TextDisplay::getTD (int row, int col) {
+	return theDisplay[row][col];
+}
 
 ostream &operator<<(ostream&out, const TextDisplay &td) {
   for (int i = 0; i < 25; ++i) {

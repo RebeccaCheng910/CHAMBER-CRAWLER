@@ -17,7 +17,7 @@ class Floor {
   std::vector<std::unique_ptr<Chamber>> theChambers;  // vector of 5 chamber
   std::shared_ptr<Player> pc;     // ptr to player character
   bool visited[25][79] ={{false}};    // check if the floor tile is added to Chamger
-  TextDisplay *td;
+  std::shared_ptr<TextDisplay> td;
 
 public: 
   Floor(std::string); // constructor
@@ -25,7 +25,8 @@ public:
   void findChamber();   //set up chambers, add objects to each chamber
   void findWall(int, int, int); // recursive call to add objects to chamber until hits wall
   void setPlayer(std::shared_ptr<Player> &); // set floor's pc
-  friend std::ostream &operator<<(std::ostream &out, const Floor &f);
+  char getTD(int, int); // get char in td with given position 
+	friend std::ostream &operator<<(std::ostream &out, const Floor &f);
 };
 
 
