@@ -14,5 +14,8 @@ int main (int argc, char *argv[]) {
   
   Controller controller;
   controller.startGame(filename);
+  char race;
+  cin >> race;
+  controller.setRace(race);
   controller.printFloor();
 }    

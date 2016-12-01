@@ -4,8 +4,11 @@
 #include "object.h"
 #include "chamber.h"
 #include <memory>
+#include <string>
+#include <fstream>
 #include "info.h"
-
+#include "player.h"
+#include "character.h"
 
 using namespace std;
 
@@ -13,7 +16,9 @@ const int numChambers = 5;
    
 
 // constructor 
-Floor::Floor(istream *in) {
+Floor::Floor(string filename) {
+  ifstream file(filename); // opens the file and read
+  istream *in = new ifstream(filename.c_str()); // read in file
   td = new TextDisplay{in};
   // initialize vector of chamber pointers
   for (int i = 0; i < numChambers; ++i) {
@@ -24,10 +29,14 @@ Floor::Floor(istream *in) {
     vector <shared_ptr<Object>> v;
     theGrid.emplace_back(v);
     string line;
-    getline(*in, line);
+    getline(file, line);
     for (int j = 0; j < col; ++j) {
       char c;
-      if (line[j] != '-' || line[j] != '|' || line[j] != ' ' || line[j] != '#' || line[j] != '.'){ 
+      if (line[j] >='0' && line[j] <='9') {
+        c ='.';
+      } else if (line[j] >= 'A' && line[j] <= 'Z') {
+        c ='.';
+      } else if (line[j] == '@' || line [j] =='\\') {
         c = '.';
       } else {
         c = line[j];
@@ -43,17 +52,17 @@ Floor::Floor(istream *in) {
   }
   // set up chamber
   findChamber();
-  for (int i = 0; i < 5; ++i) {
-  cout << "i: size is " << theChambers[i]->getSize()<< endl; 
-  }
 } 
-
-
 
 Floor::~Floor() {
   delete td;
 } 
 
+// set Floor's PC, pass by reference
+void Floor::setPlayer(shared_ptr<Player> &playerCharacter) {
+  pc = playerCharacter;
+}
+  
 
 // set up chamber, add floor tiles to chamber
 void Floor::findChamber() {
@@ -66,13 +75,11 @@ void Floor::findChamber() {
      }
    } 
  }
-
 }
-
 
 // recursive call, add Object ptr to Chamber until hit wall
 void Floor::findWall(int chamberNum,int i, int j) {
-  if (visited[i][j] == false || i < 0 || i > row || j < 0 || j > col) 
+  if (visited[i][j] == true || i < 0 || i > row || j < 0 || j > col) 
     return;
   visited[i][j] = true;
   if (theGrid[i][j]->getInfo().type != '.') return;
@@ -85,10 +92,6 @@ void Floor::findWall(int chamberNum,int i, int j) {
   findWall(chamberNum, i, j+1); /// find right
 }
   
-  
-  
-// test
-
 
 
 
