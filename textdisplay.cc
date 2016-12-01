@@ -26,8 +26,14 @@ TextDisplay::TextDisplay(istream *in) {
   }
 }
 
+// accessor 
 char TextDisplay::getTD (int row, int col) {
 	return theDisplay[row][col];
+}
+
+// mutator
+void TextDisplay::setTD (int row, int col, char c) {
+	theDisplay[row][col] = c;
 }
 
 ostream &operator<<(ostream&out, const TextDisplay &td) {

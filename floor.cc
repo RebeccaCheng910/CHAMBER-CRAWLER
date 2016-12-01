@@ -10,6 +10,7 @@
 #include "player.h"
 #include "enemy.h"
 #include "character.h"
+#include "gold.h"
 
 using namespace std;
 
@@ -84,14 +85,14 @@ void Floor::findWall(int chamberNum,int i, int j) {
   findWall(chamberNum, i, j-1); // find left
   findWall(chamberNum, i, j+1); /// find right
 }
-  
-<<<<<<< HEAD
+
 
 // read in from a file is a file exists and populates items and characters
 void Floor::readFile(istream &in) {
   char c;
   string line;
   int enemyCount = 0;
+	int goldCount = 0;
   for (int i = 0; i < row; ++i) {
     getline(in, line);
     for (int j = 0; j < col; ++j) {
@@ -119,25 +120,46 @@ void Floor::readFile(istream &in) {
       } else if (c == 'L') {
         enemies.emplace_back(make_shared<Enemy>(i, j));
         ++enemyCount;
-      }
-    }
-  }
+      } else if (c == 6) {  // nomal gold pile
+				gold.emplace_back(make_shared<Gold>(i, j, 2, true));
+				++goldCount;
+				td->setTD (i, j, 'G');
+			} else if (c == 7) {  // small hoard
+				gold.emplace_back(make_shared<Gold>(i, j, 1, true));
+				++goldCount; 
+				td->setTD (i, j, 'G');
+			} else if (c == 8) {  // merchant hoard
+				gold.emplace_back(make_shared<Gold>(i, j, 4, true));
+				++goldCount;
+				td->setTD (i, j, 'G');
+			} else if (c == 9) {   // dragon hoard
+				gold.emplace_back(make_shared<Gold>(i, j, 6, false));
+        ++goldCount;
+				td->setTD (i, j, 'G');
+     }
+   }
+ }
   /* check enemy's position
   cout << "enemy's size is " << enemies.size() << endl;
   for (int i = 0; i < enemies.size(); ++i) {
     cout << "position is " << enemies[i]->getInfo().row << " " << enemies[i]->getInfo().col << endl;
   } 
  */
+  /* check gold's position
+   cout << "gold's size is " << gold.size() << endl;
+   for (int i = 0; i < gold.size(); ++i) {
+     cout << "position is " << gold[i]->getInfo().row << " " << gold[i]->getInfo().col << endl;
+   } 
+  */
 }
  
 
 
-=======
 // check character in td given row and col
 char Floor::getTD (int x, int y) {
 	return td->getTD(x, y);
 }
->>>>>>> bb7bce37edfeab61e3eae6db7d3485d155407446
+
 
 
 // output floor

@@ -10,6 +10,7 @@ class Object;
 class Chamber;
 class Player;
 class Enemy;
+class Gold;
 
 class Floor {
   int row = 25;
@@ -18,7 +19,8 @@ class Floor {
   std::vector<std::unique_ptr<Chamber>> theChambers;  // vector of 5 chamber
   std::shared_ptr<Player> pc;     // ptr to player character
   std::vector<std::shared_ptr<Enemy>> enemies;   //ptr to 20 enemies
-  bool visited[25][79] ={{false}};    // check if the floor tile is added to Chamger
+  std::vector<std::shared_ptr<Gold>> gold;
+	bool visited[25][79] ={{false}};    // check if the floor tile is added to Chamger
   std::shared_ptr<TextDisplay> td;
 
 public: 
@@ -27,13 +29,9 @@ public:
   void findChamber();   //set up chambers, add objects to each chamber
   void findWall(int, int, int); // recursive call to add objects to chamber until hits wall
   void setPlayer(std::shared_ptr<Player> &); // set floor's pc
-<<<<<<< HEAD
   void readFile(std::istream &) ; // read in from file and create objects
   friend std::ostream &operator<<(std::ostream &out, const Floor &f);
-=======
   char getTD(int, int); // get char in td with given position 
-	friend std::ostream &operator<<(std::ostream &out, const Floor &f);
->>>>>>> bb7bce37edfeab61e3eae6db7d3485d155407446
 };
 
 
