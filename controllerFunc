@@ -1,0 +1,28 @@
+Controller::printFloor() {
+    cout << *floor << endl;
+    cout << "Race: " << pc->type << " Gold: " << pc.goldValue <<"                                                  Floor " << floorNum <<     endl;
+    cout << "HP: " << pc->HP << endl;
+    cout << "Atk: " << pc->atk << endl;
+    cout << "Def: " << pc->def << endl;
+    cout << "Action " << pc->action << endl;
+    pc.action = "";
+}
+
+bool Controller::gameOver() {
+    if (pc->HP == 0) {   // pc's health reaches 0
+        cout << "You are dead." << endl;
+        cout << "Enter 'r' to restart or 'q' to quit." << endl;
+        return true;
+    }
+    else if (floorNum > 5) {   // pc reached stairs on floor 5
+        cout << "You won! Congratulations :)" << endl;
+        int score = pc->goldValue;
+        if (pc->getinfo().type == "Shade") {
+          score *= 1.5;
+        }
+    cout << "Score : " << score  << endl;
+    cout << "Enter 'r' to restart or 'q' to quit." << endl;
+    return true;
+    }
+    return false;
+}

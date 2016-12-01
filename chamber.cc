@@ -11,3 +11,4 @@ void Chamber::addObjects(shared_ptr<Object> o) {
 int Chamber::getSize() {
   return theChamber.size();
 }
+
