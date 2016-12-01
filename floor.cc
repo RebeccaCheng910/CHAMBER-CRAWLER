@@ -8,6 +8,7 @@
 #include <fstream>
 #include "info.h"
 #include "player.h"
+#include "enemy.h"
 #include "character.h"
 
 using namespace std;
@@ -41,13 +42,7 @@ Floor::Floor(string filename) {
       } else {
         c = line[j];
       }
-      theGrid[i].emplace_back(make_shared<Object>(c));
-    }
-  }
-  // set position of objects
-  for (int i = 0; i < row; ++i) {
-    for (int j = 0; j < col; ++j) {
-      theGrid[i][j]->setCords(i,j);
+      theGrid[i].emplace_back(make_shared<Object>(i,j,c));
     }
   }
   // set up chamber
@@ -61,9 +56,9 @@ Floor::~Floor() {
 // set Floor's PC, pass by reference
 void Floor::setPlayer(shared_ptr<Player> &playerCharacter) {
   pc = playerCharacter;
+  cout << " HP is " << pc->getHP() << endl;
 }
   
-
 // set up chamber, add floor tiles to chamber
 void Floor::findChamber() {
   int chamberNum = 0;
@@ -92,6 +87,50 @@ void Floor::findWall(int chamberNum,int i, int j) {
   findWall(chamberNum, i, j+1); /// find right
 }
   
+
+// read in from a file is a file exists and populates items and characters
+void Floor::readFile(istream &in) {
+  char c;
+  string line;
+  int enemyCount = 0;
+  for (int i = 0; i < row; ++i) {
+    getline(in, line);
+    for (int j = 0; j < col; ++j) {
+     c = line[j];
+      if (c == '@') {      
+        pc->setCords(i, j);  // set PC's postion
+      } else  if (c == 'H') {
+        enemies.emplace_back(make_shared<Enemy>(i, j));
+        ++enemyCount;
+      } else if (c == 'W') {
+        enemies.emplace_back(make_shared<Enemy>(i,j));
+        ++enemyCount;
+      } else if (c == 'E') {
+        enemies.emplace_back(make_shared<Enemy>(i,j));
+        ++enemyCount;
+      } else if (c == 'O') {
+        enemies.emplace_back(make_shared<Enemy>(i,j));
+        ++enemyCount;
+      } else if (c == 'M') {
+        enemies.emplace_back(make_shared<Enemy>(i, j));
+        ++enemyCount;
+      } else if (c == 'D') {
+        enemies.emplace_back(make_shared<Enemy>(i,j));
+        ++enemyCount;
+      } else if (c == 'L') {
+        enemies.emplace_back(make_shared<Enemy>(i, j));
+        ++enemyCount;
+      }
+    }
+  }
+  /* check enemy's position
+  cout << "enemy's size is " << enemies.size() << endl;
+  for (int i = 0; i < enemies.size(); ++i) {
+    cout << "position is " << enemies[i]->getInfo().row << " " << enemies[i]->getInfo().col << endl;
+  } 
+ */
+}
+ 
 
 
 

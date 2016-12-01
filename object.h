@@ -10,9 +10,8 @@ class Object {
   int row,col;
   char type;
 public: 
-  Object(char type); // constructori
-  void setCords(int, int);  // set an object's col and row
-  
+  Object(int, int, char);
+  virtual void setCords(int, int);  // set an object's col and row
 
   virtual Info getInfo() ;  // return object's rol, col and info
 };

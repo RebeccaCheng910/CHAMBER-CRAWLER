@@ -9,21 +9,23 @@
 
 using namespace std;
 
-Controller::Controller() {
+Controller::Controller(bool useDefault, string fileName):useDefault{useDefault}, file{fileName} {
   floor = nullptr;
   pc = nullptr;
 }
 
 // opens a file and initilize a game
-void Controller::startGame(string filename) {
-
-  cout << "Welcome! Please choose a race" << endl;
+void Controller::startGame() {
+  for (int i = 0; i < 10; ++i) {
+    cout << endl;
+  }
+  cout << "Please choose a race" << endl;
   cout << "s - Shade" << endl;
   cout << "d - Drow" << endl;
   cout << "v - Vampire" << endl;
   cout << "g - Grblic" << endl;
   cout << "t - Troll" << endl;
-  floor = make_shared<Floor>(filename);
+  floor = make_shared<Floor>(file);
 }
 
 Controller::~Controller() {
@@ -43,6 +45,15 @@ void Controller::setRace(char c) {
     pc = make_shared<Player>();
   }
   floor->setPlayer(pc);  // set floor's  pc
+}
+
+
+// generate enemies if file exists, or consturct enemies if file does not exist
+void Controller::setBoard(){
+  if (! useDefault) {
+    ifstream in{file};
+    floor->readFile(in);
+  }
 }
 
 void Controller::printFloor() {

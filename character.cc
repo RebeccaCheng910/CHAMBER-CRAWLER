@@ -5,7 +5,7 @@
 using namespace std;
 
 // constructor
-Character::Character(char type): Object{type} {
+Character::Character(int row, int col, char type): Object{row, col, type} {
 }
 
 

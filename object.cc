@@ -3,8 +3,7 @@
 #include "info.h"
 
 
-Object::Object(char c) {
-  type = c;
+Object::Object(int row, int col, char type): row{row}, col{col},type{type} {
 /*
   if (c == '-') || (c == '|') {
     ObjectType = WALL;
@@ -20,7 +19,6 @@ Object::Object(char c) {
     ObjectType = PC;
   }
 */ 
-    
 }
 
 // set an object's coort

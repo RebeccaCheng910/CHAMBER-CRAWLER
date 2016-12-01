@@ -1,11 +1,11 @@
-#ifndef _PLAYER_H_
-#define _PLAYER_H_
+#ifndef _ENEMY_H_
+#define _ENEMY_H_
 
 #include "character.h"
 
-class Player: public Character {
+class Enemy:public Character{
 public:
-  Player(); // constructor
+  Enemy(int, int);
   int getHP() override;
   int getAtk() override;
   int getDef() override;
