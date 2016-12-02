@@ -1,5 +1,8 @@
 #include "chamber.h"
+#include "object.h"
 #include <memory>
+#include <cstdlib>
+#include "info.h"
 
 using namespace std;
 
@@ -12,3 +15,10 @@ int Chamber::getSize() {
   return theChamber.size();
 }
 
+// random generate a chember's position
+void Chamber::generatePosition(Object *o) {
+  int n = rand() % theChamber.size();
+  int row = theChamber[n]->getInfo().row;
+  int col = theChamber[n]->getInfo().col;
+  o->setCords(row, col);
+}

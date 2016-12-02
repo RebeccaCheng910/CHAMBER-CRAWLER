@@ -12,10 +12,11 @@
 #include "character.h"
 #include "gold.h"
 #include "potion.h"
+#include <cstdlib>
+
 
 using namespace std;
 
-const int numChambers = 5;   
 
 // constructor 
 Floor::Floor(string filename) {
@@ -23,7 +24,7 @@ Floor::Floor(string filename) {
   istream *in = new ifstream(filename.c_str()); // read in file
   td = make_shared<TextDisplay>(in);
   // initialize vector of chamber pointers
-  for (int i = 0; i < numChambers; ++i) {
+  for (int i = 0; i < totalChamber; ++i) {
     theChambers.emplace_back(make_unique<Chamber>());
   }
   // initilize default objects without populated items
@@ -167,6 +168,22 @@ void Floor::readFile(istream &in) {
   */
 }
  
+
+// a file does not exist, random generate enemies and items
+void Floor:: generate() {
+  //generate pc's location
+  const int pcChamber = rand() % totalChamber;
+  int stairChamber;
+  do {
+    stairChamber = rand() % totalChamber;
+  } while (stairChamber == pcChamber);
+  cout <<  " pc in chamber:"  << pcChamber << endl;   // DEBUG
+  // set pc's position
+  theChambers[pcChamber]->generatePosition(pc.get());
+  cout << "PC's position" << pc->getInfo().row << " " << pc->getInfo().col << endl;  //DEBUG
+  td->setTD(pc->getInfo().row, pc->getInfo().col, pc->getInfo().type);
+}
+
 
 
 // check character in td given row and col

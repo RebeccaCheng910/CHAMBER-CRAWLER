@@ -1,1 +1,1 @@
-main.o: main.cc controller.h floor.h
+main.o: main.cc controller.h

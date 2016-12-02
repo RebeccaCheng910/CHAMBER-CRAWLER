@@ -1,7 +1,8 @@
 #include <iostream>
+#include <memory>
 #include <string>
-#include "floor.h"
 
+class Floor;
 class Player;
 
 class Controller {

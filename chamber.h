@@ -11,6 +11,7 @@ class Chamber {
 public:
    void addObjects(std::shared_ptr<Object>); // add an object to the chamberi
    int getSize(); // return the size of Chamber
+   void generatePosition(Object *);
 };
 
-#endif  
+#endif
