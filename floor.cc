@@ -192,6 +192,7 @@ void Floor::generate() {
   td->setTD(stair->getInfo().row, stair->getInfo().col, stair->getInfo().type); 
   generatePotion();    // generate potion
   generateGold();
+  generateEnemy();
 }
 
 void Floor::generatePotion() {
@@ -220,7 +221,18 @@ void Floor::generateGold() {
   }
 }
 
-
+// generate enemies without specialized type
+void Floor::generateEnemy() {
+  int enemyChamber;
+  int enemyType;
+  for (int i = 0; i < totalEnemy; ++i) {
+    enemyChamber = rand() % totalChamber;
+    enemyType = rand() % 18;
+    enemies.emplace_back(make_shared<Enemy>(0,0));
+    theChambers[enemyChamber]->generatePosition(enemies[i].get());
+    td->setTD(enemies[i]->getInfo().row, enemies[i]->getInfo().col, enemies[i]->getInfo().type);
+   }
+ }
 
 
 // output floor

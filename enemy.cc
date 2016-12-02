@@ -1,7 +1,7 @@
 #include "enemy.h"
 #include "character.h"
 
-Enemy::Enemy(int row, int col): Character{row, col,'e'} {
+Enemy::Enemy(int row, int col): Character{row, col,'E'} {
   HP = 140;  //human
   Atk = 20;
   Def = 20;

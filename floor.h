@@ -31,6 +31,7 @@ class Floor {
   
   void generatePotion();
   void generateGold();
+  void generateEnemy();
 
 public: 
   Floor(std::string); // constructor
