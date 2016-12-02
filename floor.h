@@ -17,6 +17,8 @@ class Floor {
   int row = 25;
   int col = 79;
   int totalChamber = 5;
+  int totalItem = 10;
+  int totalEnemy = 20;
   std::vector<std::vector<std::shared_ptr<Object>>> theGrid;
   std::vector<std::unique_ptr<Chamber>> theChambers;  // vector of 5 chamber
   std::shared_ptr<Player> pc;     // ptr to player character
@@ -26,6 +28,9 @@ class Floor {
   std::vector<std::shared_ptr<Potion>> potions;  // ptr to 10 potions
   bool visited[25][79] ={{false}};    // check if the floor tile is added to Chamger
   std::shared_ptr<TextDisplay> td;
+  
+  void generatePotion();
+  void generateGold();
 
 public: 
   Floor(std::string); // constructor

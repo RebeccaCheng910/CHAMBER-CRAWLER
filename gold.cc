@@ -5,10 +5,21 @@
 
 using namespace std;
 
-//constructor
-Gold::Gold (int row, int col, char type, int n, bool isProtected): Object{row, col, type} {
-	value = n;
-	isProtected = isProtected;
+//constructor, n take 0-8
+Gold::Gold (int row, int col, int n): Object{row, col, 'G'} {
+  if ( n >= 0 && n < 5) {  // normal pile
+    value = 2;
+    isProtected = false;
+  } else if (n == 5) { // gragon hord
+    value = 6;
+    isProtected = true;
+  } else if ( n == 6 || n == 7) { //small hoard
+    value = 1;
+    isProtected = false;
+  } else if ( n == 10) {  //
+     value = 4;
+     isProtected = false;
+  }
 }
 
 // destructor

@@ -9,7 +9,7 @@ class Potion: public Object {
 	int effectAtk;
   int effectDef;
 public:
-	Potion(int, int, char, int);
+	Potion(int, int, int);
   ~Potion();	
 	int getType();
 	int getEffectHP();

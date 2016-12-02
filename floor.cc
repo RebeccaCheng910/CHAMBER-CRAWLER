@@ -126,34 +126,34 @@ void Floor::readFile(istream &in) {
         enemies.emplace_back(make_shared<Enemy>(i, j));
         ++enemyCount;
       } else if (c == 0) {  // Restore Health
-        potions.emplace_back(make_shared<Potion>(i, j, '.', 0));
-				++potionCount;
-			} else if (c == 1) {  // Boost Attack 
-				potions.emplace_back(make_shared<Potion>(i, j, '.', 1));
-				++potionCount;
-			} else if (c == 2) {  // Boost Defence
-				potions.emplace_back(make_shared<Potion>(i, j, '.',2));
-			  ++potionCount;
-			} else if (c == 3) {  // Poison Health
-				potions.emplace_back(make_shared<Potion>(i, j, '.', 3));
-				++potionCount;
-			} else if (c == 4) {   // Wound Attack
-				potions.emplace_back(make_shared<Potion>(i, j, '.', 4));
-				++potionCount;
-			} else if (c == 5) {   // Wound Defence
- 				potions.emplace_back(make_shared<Potion>(i, j, '.', 5));
-				++potionCount;
+        potions.emplace_back(make_shared<Potion>(i, j, 0));
+	++potionCount;
+      } else if (c == 1) {  // Boost Attack 
+	potions.emplace_back(make_shared<Potion>(i, j, 1));
+	++potionCount;
+      } else if (c == 2) {  // Boost Defence
+	potions.emplace_back(make_shared<Potion>(i, j, 2));
+	++potionCount;
+      } else if (c == 3) {  // Poison Health
+	potions.emplace_back(make_shared<Potion>(i, j, 3));
+	++potionCount;
+      } else if (c == 4) {   // Wound Attack
+	potions.emplace_back(make_shared<Potion>(i, j,  4));
+	++potionCount;
+      } else if (c == 5) {   // Wound Defence
+ 	potions.emplace_back(make_shared<Potion>(i, j,  5));
+	++potionCount;
       } else if (c == 6) {  // nomal gold pile
-				golds.emplace_back(make_shared<Gold>(i, j, '.', 2, true));
-				++goldCount;
-			} else if (c == 7) {  // small hoard
-				golds.emplace_back(make_shared<Gold>(i, j, '.', 1, true));
-				++goldCount; 
-			} else if (c == 8) {  // merchant hoard
-				golds.emplace_back(make_shared<Gold>(i, j, '.', 4, true));
-				++goldCount;
+	golds.emplace_back(make_shared<Gold>(i, j, 0));
+	++goldCount;
+      } else if (c == 7) {  // small hoard
+	golds.emplace_back(make_shared<Gold>(i, j, 7));
+	++goldCount; 
+	} else if (c == 8) {  // merchant hoard
+        golds.emplace_back(make_shared<Gold>(i, j, 10));
+	++goldCount;
 			} else if (c == 9) {   // dragon hoard
-				golds.emplace_back(make_shared<Gold>(i, j, '.', 6, false));
+				golds.emplace_back(make_shared<Gold>(i, j, 5));
         ++goldCount;
      }
    }
@@ -174,22 +174,50 @@ void Floor::readFile(istream &in) {
  
 
 // a file does not exist, random generate enemies and items
-void Floor:: generate() {
+void Floor::generate() {
   //generate pc's location
   const int pcChamber = rand() % totalChamber;
   int stairChamber;
   do {
     stairChamber = rand() % totalChamber;
   } while (stairChamber == pcChamber);
-  cout <<  " pc in chamber:"  << pcChamber << endl;   // DEBUG
+  // cout <<  " pc in chamber:"  << pcChamber << endl;   // DEBUG
   // set pc's position
   theChambers[pcChamber]->generatePosition(pc.get());
-  cout << "PC's position" << pc->getInfo().row << " " << pc->getInfo().col << endl;  //DEBUG
+  // cout << "PC's position" << pc->getInfo().row << " " << pc->getInfo().col << endl;  //DEBUG
   td->setTD(pc->getInfo().row, pc->getInfo().col, pc->getInfo().type);
   // generate stair's location
   theChambers[stairChamber]->generatePosition(stair.get());
-  cout << "stair's position" << stair->getInfo().row << " " << stair->getInfo().col << endl;  //DEBUG
-  td->setTD(stair->getInfo().row, stair->getInfo().col, stair->getInfo().type);   
+  // cout << "stair's position" << stair->getInfo().row << " " << stair->getInfo().col << endl;  //DEBUG
+  td->setTD(stair->getInfo().row, stair->getInfo().col, stair->getInfo().type); 
+  generatePotion();    // generate potion
+  generateGold();
+}
+
+void Floor::generatePotion() {
+  int potionChamber;
+  int potionType;
+  for (int i = 0; i < totalItem; ++i) {
+    potionChamber = rand() % totalChamber;
+    potionType = rand() % 6;
+   // cout << "type is " << potionType << endl;     //DeBUG
+    potions.emplace_back(make_shared<Potion>(0,0,potionType));
+    theChambers[potionChamber]->generatePosition(potions[i].get());
+    td->setTD(potions[i]->getInfo().row, potions[i]->getInfo().col, potions[i]->getInfo().type);
+  }
+}
+   
+    
+void Floor::generateGold() {
+  int goldChamber;
+  int goldType;
+  for (int i = 0; i < totalItem; ++i) {
+    goldChamber = rand() % totalChamber;
+    goldType = rand() % 8;
+    golds.emplace_back(make_shared<Gold>(0,0,goldType));
+    theChambers[goldChamber]->generatePosition(golds[i].get());
+    td->setTD(golds[i]->getInfo().row, golds[i]->getInfo().col, golds[i]->getInfo().type);
+  }
 }
 
 
