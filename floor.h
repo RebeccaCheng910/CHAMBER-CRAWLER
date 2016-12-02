@@ -11,6 +11,7 @@ class Chamber;
 class Player;
 class Enemy;
 class Gold;
+class Potion;
 
 class Floor {
   int row = 25;
@@ -19,7 +20,8 @@ class Floor {
   std::vector<std::unique_ptr<Chamber>> theChambers;  // vector of 5 chamber
   std::shared_ptr<Player> pc;     // ptr to player character
   std::vector<std::shared_ptr<Enemy>> enemies;   //ptr to 20 enemies
-  std::vector<std::shared_ptr<Gold>> gold;
+  std::vector<std::shared_ptr<Gold>> golds;  // ptr to 10 golds
+	std::vector<std::shared_ptr<Potion>> potions;  // ptr to 10 potions
 	bool visited[25][79] ={{false}};    // check if the floor tile is added to Chamger
   std::shared_ptr<TextDisplay> td;
 

@@ -6,7 +6,7 @@
 using namespace std;
 
 //constructor
-Gold::Gold (int row, int col, int n, bool isProtected): Object{row, col, 'G'} {
+Gold::Gold (int row, int col, char type, int n, bool isProtected): Object{row, col, type} {
 	value = n;
 	isProtected = isProtected;
 }

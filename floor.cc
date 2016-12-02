@@ -11,11 +11,11 @@
 #include "enemy.h"
 #include "character.h"
 #include "gold.h"
+#include "potion.h"
 
 using namespace std;
 
-const int numChambers = 5;
-   
+const int numChambers = 5;   
 
 // constructor 
 Floor::Floor(string filename) {
@@ -91,8 +91,8 @@ void Floor::findWall(int chamberNum,int i, int j) {
 void Floor::readFile(istream &in) {
   char c;
   string line;
-  int enemyCount = 0;
-	int goldCount = 0;
+  int enemyCount, goldCount, potionCount;
+
   for (int i = 0; i < row; ++i) {
     getline(in, line);
     for (int j = 0; j < col; ++j) {
@@ -120,22 +120,36 @@ void Floor::readFile(istream &in) {
       } else if (c == 'L') {
         enemies.emplace_back(make_shared<Enemy>(i, j));
         ++enemyCount;
+			} else if (c == 0) {  // Restore Health
+        potions.emplace_back(make_shared<Potion>(i, j, '.', 0));
+				++potionCount;
+			} else if (c == 1) {  // Boost Attack 
+				potions.emplace_back(make_shared<Potion>(i, j, '.', 1));
+				++potionCount;
+			} else if (c == 2) {  // Boost Defence
+				potions.emplace_back(make_shared<Potion>(i, j, '.',2));
+			  ++potionCount;
+			} else if (c == 3) {  // Poison Health
+				potions.emplace_back(make_shared<Potion>(i, j, '.', 3));
+				++potionCount;
+			} else if (c == 4) {   // Wound Attack
+				potions.emplace_back(make_shared<Potion>(i, j, '.', 4));
+				++potionCount;
+			} else if (c == 5) {   // Wound Defence
+ 				potions.emplace_back(make_shared<Potion>(i, j, '.', 5));
+				++potionCount;
       } else if (c == 6) {  // nomal gold pile
-				gold.emplace_back(make_shared<Gold>(i, j, 2, true));
+				golds.emplace_back(make_shared<Gold>(i, j, '.', 2, true));
 				++goldCount;
-				td->setTD (i, j, 'G');
 			} else if (c == 7) {  // small hoard
-				gold.emplace_back(make_shared<Gold>(i, j, 1, true));
+				golds.emplace_back(make_shared<Gold>(i, j, '.', 1, true));
 				++goldCount; 
-				td->setTD (i, j, 'G');
 			} else if (c == 8) {  // merchant hoard
-				gold.emplace_back(make_shared<Gold>(i, j, 4, true));
+				golds.emplace_back(make_shared<Gold>(i, j, '.', 4, true));
 				++goldCount;
-				td->setTD (i, j, 'G');
 			} else if (c == 9) {   // dragon hoard
-				gold.emplace_back(make_shared<Gold>(i, j, 6, false));
+				golds.emplace_back(make_shared<Gold>(i, j, '.', 6, false));
         ++goldCount;
-				td->setTD (i, j, 'G');
      }
    }
  }
@@ -167,3 +181,4 @@ ostream &operator<< (ostream &out, const Floor &f) {
   out << *f.td;
   return out;
 }
+

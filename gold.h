@@ -7,7 +7,7 @@ class Gold:public Object {
   int value;
 	bool isProtected;
 public:
-	Gold (int, int, int, bool);
+	Gold (int, int, char, int, bool);
 	~Gold();
 	int getValue();
 	bool getGold();
