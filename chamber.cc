@@ -21,4 +21,5 @@ void Chamber::generatePosition(Object *o) {
   int row = theChamber[n]->getInfo().row;
   int col = theChamber[n]->getInfo().col;
   o->setCords(row, col);
+  theChamber.erase(theChamber.begin() + n);    // delete object ptr
 }

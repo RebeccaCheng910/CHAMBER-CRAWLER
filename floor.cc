@@ -47,6 +47,8 @@ Floor::Floor(string filename) {
       theGrid[i].emplace_back(make_shared<Object>(i,j,c));
     }
   }
+  // initialize staircase
+  stair = make_shared<Object>(0,0,'\\');
   // set up chamber
   findChamber();
 } 
@@ -100,6 +102,8 @@ void Floor::readFile(istream &in) {
      c = line[j];
       if (c == '@') {      
         pc->setCords(i, j);  // set PC's postion
+      } else if (c == '\\') {  // set stair's position
+        stair->setCords(i,j);
       } else  if (c == 'H') {
         enemies.emplace_back(make_shared<Enemy>(i, j));
         ++enemyCount;
@@ -121,7 +125,7 @@ void Floor::readFile(istream &in) {
       } else if (c == 'L') {
         enemies.emplace_back(make_shared<Enemy>(i, j));
         ++enemyCount;
-			} else if (c == 0) {  // Restore Health
+      } else if (c == 0) {  // Restore Health
         potions.emplace_back(make_shared<Potion>(i, j, '.', 0));
 				++potionCount;
 			} else if (c == 1) {  // Boost Attack 
@@ -182,14 +186,12 @@ void Floor:: generate() {
   theChambers[pcChamber]->generatePosition(pc.get());
   cout << "PC's position" << pc->getInfo().row << " " << pc->getInfo().col << endl;  //DEBUG
   td->setTD(pc->getInfo().row, pc->getInfo().col, pc->getInfo().type);
+  // generate stair's location
+  theChambers[stairChamber]->generatePosition(stair.get());
+  cout << "stair's position" << stair->getInfo().row << " " << stair->getInfo().col << endl;  //DEBUG
+  td->setTD(stair->getInfo().row, stair->getInfo().col, stair->getInfo().type);   
 }
 
-
-
-// check character in td given row and col
-char Floor::getTD (int x, int y) {
-	return td->getTD(x, y);
-}
 
 
 

@@ -20,6 +20,7 @@ class Floor {
   std::vector<std::vector<std::shared_ptr<Object>>> theGrid;
   std::vector<std::unique_ptr<Chamber>> theChambers;  // vector of 5 chamber
   std::shared_ptr<Player> pc;     // ptr to player character
+  std::shared_ptr<Object> stair;
   std::vector<std::shared_ptr<Enemy>> enemies;   //ptr to 20 enemies
   std::vector<std::shared_ptr<Gold>> golds;  // ptr to 10 golds
   std::vector<std::shared_ptr<Potion>> potions;  // ptr to 10 potions
