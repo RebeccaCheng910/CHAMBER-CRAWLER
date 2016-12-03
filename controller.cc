@@ -62,15 +62,13 @@ void Controller::setBoard(){
  
 void Controller::printFloor() {
   cout << *floor;
-<<<<<<< HEAD
   cout << "Race: " << pc->getRace();
   cout << " Gold: " << pc->getGold() << endl;
   cout << "HP: " << pc->getHP() << endl;
   cout << "Atk: " << pc->getAtk() << endl;
   cout << "Def: " << pc->getDef() << endl;
   cout << "Action: " << pc->getAction() << endl;
-=======
-	floor->moveEnemy();
+  floor->moveEnemy();
+  floor->movePlayer(-1,-1);
 	cout << *floor;
->>>>>>> a20cea3b5fcf0cda3b2465e609098202101939a8
 }

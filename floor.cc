@@ -13,7 +13,7 @@
 #include "gold.h"
 #include "potion.h"
 #include <cstdlib>
-
+#include <stdexcept>
 
 using namespace std;
 
@@ -304,9 +304,37 @@ void Floor::moveEnemy() {
  }
 }
 
-						
+// move pc according to command of game players (no, so, ea, we,ne, nw, se, sw) 
+void Floor::movePlayer(int new_x, int new_y) {
+	int x = pc->getInfo().row;
+  int y = pc->getInfo().col;
+  char c = td->getTD(x + new_x, y + new_y);
+  if (c == '\\') {
+		int err = 1;
+		throw err;
+		td->setTD(x, y, '.');
+	} else if ((c == '.') || (c == '#') || (c == 'G')) {
+		// if (c == 'G') 
+    td->setTD(x + new_x, y + new_y, '@');
+		td->setTD(x, y, '.');
+    pc->setCords(x + new_x, y + new_y);
+		pc->setAction(pc->getAction() + "PC moves");
+		moveEnemy();
+		
+		for (int i = x+new_x-1; i <= x+new_x+1; ++i) {
+			for (int j = y+new_y-1; j <= y+new_y+1; ++j) {
+     	// attck ......
+     	if (td->getTD(i,j) == 'P') {
+        	pc->setAction(pc->getAction() + " and sees an known portion.");
+        	break;
+      	}
+			}
+		}
+	} else pc->setAction(pc->getAction() + "Invalid direction, PC's way is blocked.");
+}
 
-// move objects to given row and col 
+
+// move each enemy to given position
 void Floor::moveObject(int old_x, int old_y, int new_x, int new_y, char symbol, const shared_ptr<Enemy>&e) {
 	td->setTD(old_x, old_y, '.');
 	td->setTD(new_x, new_y, symbol);

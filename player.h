@@ -13,6 +13,7 @@ public:
   int getAtk() override;
   int getDef() override;
   std::string getAction();
+  void setAction(std::string);
   virtual int getGold();   // goblin needs to overload
 };
 
