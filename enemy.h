@@ -4,8 +4,11 @@
 #include "character.h"
 
 class Enemy:public Character{
+	bool hasMoved;
 public:
   Enemy(int, int);
+  int getMove();
+  void setMove(bool);
   int getHP() override;
   int getAtk() override;
   int getDef() override;
