@@ -27,5 +27,16 @@ int main (int argc, char *argv[]) {
   
   controller.printFloor();
 
-  // reads input
+  // reads command
+  string cmd;
+  bool status = true;  
+  while (status) {   // game continues
+    cin >> cmd;
+    if (cmd == "no"|| cmd == "so"|| cmd == "ea"|| 
+        cmd == "we"|| cmd == "ne"|| cmd == "nw"|| cmd == "se"|| cmd == "sw") {
+      controller.move(cmd);
+    } else {
+       cout << "Invalid Command"  << endl;
+    }
+  }  
 }    
