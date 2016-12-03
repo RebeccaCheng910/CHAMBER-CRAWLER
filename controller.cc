@@ -13,6 +13,7 @@ using namespace std;
 Controller::Controller(bool useDefault, string fileName):useDefault{useDefault}, file{fileName} {
   floor = nullptr;
   pc = nullptr;
+  floorNum = 1;
 }
 
 // opens a file and initilize a game
@@ -63,12 +64,48 @@ void Controller::setBoard(){
 void Controller::printFloor() {
   cout << *floor;
   cout << "Race: " << pc->getRace();
-  cout << " Gold: " << pc->getGold() << endl;
+  cout << " Gold: " << pc->getGold();
+  for (int i = 0; i < 45; ++i) { 
+    cout << " ";
+  }
+  cout << "Floor " << floorNum << endl;
   cout << "HP: " << pc->getHP() << endl;
   cout << "Atk: " << pc->getAtk() << endl;
   cout << "Def: " << pc->getDef() << endl;
   cout << "Action: " << pc->getAction() << endl;
+<<<<<<< HEAD
   floor->moveEnemy();
   floor->movePlayer(-1,-1);
 	cout << *floor;
+=======
+>>>>>>> d5febaff90f26cf76aad7cefa64232ef1acb4525
 }
+
+void Controller::move(string direction) {
+  int x,y;
+  if (direction == "no") {
+    x = -1; y = 0;
+  } else if (direction =="so")  {
+    x = 1; y = 0;
+  } else if (direction == "ea") {
+    x = 0; y = 1;
+  } else if (direction == "we") {
+    x = 0 ; y = -1;
+  } else if (direction == "ne") {
+    x = -1; y = 1;
+  } else if (direction == "nw") {
+    x = -1; y = -1;
+  } else if (direction == "se") {
+    x = 1; y = 1;
+  } else if (direction == "sw") {
+    x = 1; y = -1;
+  }
+  try {
+  //  floor->movePlayer();
+  } catch( const int n) {  // pc reaches staircase
+    ++floorNum;
+                  //
+  }
+  printFloor();
+}
+ 
