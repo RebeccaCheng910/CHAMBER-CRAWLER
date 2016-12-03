@@ -5,14 +5,6 @@
 #include "time.h"
 using namespace std;
 
-// helper fucntion, check direction read
-bool check_direction(string direction) {
-  if (direction == "no"|| direction == "so"|| direction == "ea"||
-      direction == "we"|| direction == "ne"|| direction == "nw"|| direction == "se"|| direction == "sw")
-    return true;
-    return false;
-}
-
 
 int main (int argc, char *argv[]) {
   cin.exceptions(ios::failbit|ios::eofbit);
@@ -43,15 +35,12 @@ int main (int argc, char *argv[]) {
   try {
     while (status) {   // game continues    
       cin >> cmd;
-      if (check_direction(cmd)) { // move PC
+      if (cmd == "no" || cmd == "so" || cmd == "ea" || cmd == "we" 
+            ||cmd == "ne" || cmd == "nw" || cmd == "se" || cmd == "sw") { // move PC
       	 controller.move(cmd);
       } else if (cmd == "u") {  // use potion
          cin >> direction; 
-         if (check_direction(direction)) {
-          // controller.usePotion(direction);
-         } else {  // direction not valid 
-           cout << "Invalid Direction" << endl;
-         }
+         controller.usePotion(direction);
       } else {
        	 cout << "Invalid Command"  << endl;
       }

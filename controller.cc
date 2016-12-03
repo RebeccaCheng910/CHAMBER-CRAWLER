@@ -9,6 +9,33 @@
 
 using namespace std;
 
+
+// convert direction to a pair of inte(x, y)
+pair<int, int> convert_direc(string direction) {
+  int x,y;
+   if (direction == "no") {
+     x = -1; y = 0;
+   } else if (direction =="so")  {
+     x = 1; y = 0;
+   } else if (direction == "ea") {
+     x = 0; y = 1;
+   } else if (direction == "we") {
+     x = 0 ; y = -1;
+   } else if (direction == "ne") {
+     x = -1; y = 1;
+   } else if (direction == "nw") {
+     x = -1; y = -1;
+   } else if (direction == "se") {
+     x = 1; y = 1;
+   } else if (direction == "sw") { 
+     x = 1; y = -1;
+   } else {   // invalid direction 
+     x= 0; y = 0;
+  }
+  return make_pair(x,y);
+}
+
+// constructor
 Controller::Controller(bool useDefault, string fileName):useDefault{useDefault}, file{fileName} {
   floor = nullptr;
   pc = nullptr;
@@ -75,30 +102,25 @@ void Controller::printFloor() {
 }
 
 void Controller::move(string direction) {
-  int x,y;
-  if (direction == "no") {
-    x = -1; y = 0;
-  } else if (direction =="so")  {
-    x = 1; y = 0;
-  } else if (direction == "ea") {
-    x = 0; y = 1;
-  } else if (direction == "we") {
-    x = 0 ; y = -1;
-  } else if (direction == "ne") {
-    x = -1; y = 1;
-  } else if (direction == "nw") {
-    x = -1; y = -1;
-  } else if (direction == "se") {
-    x = 1; y = 1;
-  } else if (direction == "sw") {
-    x = 1; y = -1;
-  }
+  pair<int,int> p = convert_direc(direction);
   try {
-  	floor->movePlayer(x, y);
+  	floor->movePlayer(p.first, p.second);
   } catch( const int n) {  // pc reaches staircase
     ++floorNum;
                   //
   }
   printFloor();
 }
- 
+
+
+
+// use potion in direction
+void Controller::usePotion(string direction)  {
+  pair<int, int> p = convert_direc(direction);
+  if (p.first == 0 && p.second == 0) {
+    cout << "Invalid direction" << endl;
+  } else {
+   // floor->
+  }
+} 
+

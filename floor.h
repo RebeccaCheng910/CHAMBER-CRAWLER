@@ -45,7 +45,7 @@ public:
   void moveEnemy();
   std::shared_ptr<Enemy> getEnemy(int, int);
   void movePlayer(int, int);
-	void moveObject(int, int, int, int, char, const std::shared_ptr<Enemy>&);
+  void moveObject(int, int, int, int, char, const std::shared_ptr<Enemy>&);
   friend std::ostream &operator<<(std::ostream &out, const Floor &f);
 };
 
