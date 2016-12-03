@@ -24,6 +24,7 @@ Object::Object(int row, int col, char type): row{row}, col{col},type{type} {
 // set an object's coort
 void Object::setCords(int i, int j) {row = i; col = j;}
 
+
 Info Object::getInfo() {
   Info x = {row, col, type};
   return x;

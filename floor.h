@@ -8,6 +8,7 @@
 class TextDisplay;
 class Object;
 class Chamber;
+class Character;
 class Player;
 class Enemy;
 class Gold;
@@ -41,6 +42,9 @@ public:
   void setPlayer(std::shared_ptr<Player> &); // set floor's pc
   void readFile(std::istream &) ; // read in from file and create objects
   void generate();  // random generate pc's position and enemies
+  void moveEnemy();
+  std::shared_ptr<Enemy> getEnemy(int, int);
+  void moveObject(int, int, int, int, char, const std::shared_ptr<Enemy>&);
   friend std::ostream &operator<<(std::ostream &out, const Floor &f);
 };
 

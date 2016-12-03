@@ -57,7 +57,10 @@ void Controller::setBoard(){
     floor->generate();
   }
 }
+
  
 void Controller::printFloor() {
   cout << *floor;
+	floor->moveEnemy();
+	cout << *floor;
 }

@@ -24,5 +24,6 @@ int main (int argc, char *argv[]) {
   cin >> race;
   controller.setRace(race);  // ask for race
   controller.setBoard();     // generate enemies and items
+  
   controller.printFloor();
 }    

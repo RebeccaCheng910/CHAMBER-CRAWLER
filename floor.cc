@@ -224,7 +224,7 @@ void Floor::generateGold() {
 // generate enemies without specialized type
 void Floor::generateEnemy() {
   int enemyChamber;
-  int enemyType;
+	int enemyType;
   for (int i = 0; i < totalEnemy; ++i) {
     enemyChamber = rand() % totalChamber;
     enemyType = rand() % 18;
@@ -234,6 +234,87 @@ void Floor::generateEnemy() {
    }
  }
 
+// find pointer to Enemy with given row and col 
+shared_ptr<Enemy> Floor::getEnemy(int row, int col) {
+   int size = enemies.size();
+   for (int i = 0; i < size; ++i) {
+     if ((enemies[i]->getInfo().row == row) && (enemies[i]->getInfo().col == col)) {
+       return enemies[i];
+     }
+	}
+     return nullptr;
+}
+
+ 
+// move all enemies starts from leftmost and upmost
+void Floor::moveEnemy() {
+  for (auto it = enemies.begin(); it < enemies.end(); ++it) {
+		(*it)->setMove(false);
+  }
+   char c = '.';
+   for (int i = 0; i < row; ++i) {
+     for (int j = 0; j < col; ++j) {
+				 char symbol = td->getTD(i, j);
+         if ((symbol == 'H')||(symbol == 'W')||(symbol == 'E')||(symbol == 'O')||(symbol == 'M')||(symbol == 'L')) {
+            shared_ptr <Enemy> e = getEnemy(i, j);
+						vector <int> directions;
+            // cout << "enemy's current position: " << i << " " << j << endl;
+             if (e != nullptr && e->getMove() != true) {                              
+								if (td->getTD(i,j+1) == c) {
+                 directions.emplace_back(0);  // west
+                }
+								if (td->getTD(i,j-1) == c) {
+                 directions.emplace_back(1);  // east
+                } 
+								if (td->getTD(i+1,j) == c) {
+                 directions.emplace_back(2);  // south
+                }
+								if (td->getTD(i-1,j) == '.') {
+                 directions.emplace_back(3);  // north
+                } 
+								if (td->getTD(i-1,j+1) == c) {
+                 directions.emplace_back(4);  // ne
+                } 
+								if (td->getTD(i+1,j+1) == c) {
+                 directions.emplace_back(5);  // se
+                } 
+								if (td->getTD(i-1,j-1) == c) {
+                 directions.emplace_back(6);  // nw
+                }
+								if (td->getTD(i+1,j-1) == c) {
+                 directions.emplace_back(7);  // sw
+								}
+						int size = directions.size();
+						if (size != 0) { 
+							int randomDir = directions[rand() % size];
+            	int x = i;
+            	int y = j;
+							if (randomDir == 0) {y++;}
+							else if (randomDir == 1) {y--;}
+            	else if (randomDir == 2) {x++;}
+							else if (randomDir == 3) {x--;}
+							else if (randomDir == 4) {x--; y++;}
+							else if (randomDir == 5) {x++; y++;}
+            	else if (randomDir == 6) {x--; y--;}
+            	else if (randomDir == 7) {x++; y--;}
+							moveObject(i,j,x,y,symbol,e);
+				  }
+				} 
+			}
+	 }
+ }
+}
+
+						
+
+// move objects to given row and col 
+void Floor::moveObject(int old_x, int old_y, int new_x, int new_y, char symbol, const shared_ptr<Enemy>&e) {
+	td->setTD(old_x, old_y, '.');
+	td->setTD(new_x, new_y, symbol);
+	e->setCords(new_x, new_y);
+  e->setMove(true);
+}
+  	
 
 // output floor
 ostream &operator<< (ostream &out, const Floor &f) {
