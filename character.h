@@ -3,6 +3,7 @@
 
 #include "object.h"
 
+// abstract class
 class Character: public Object{
 protected:
   int HP, Atk, Def;

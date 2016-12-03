@@ -5,7 +5,6 @@
 #include <fstream>
 #include <memory>
 #include "character.h"
-#include "player.h"
 #include "shade.h"
 
 using namespace std;
@@ -36,13 +35,13 @@ Controller::~Controller() {
 // set a PC with no specialized type
 void Controller::setRace(char c) {
   if (c == 'd') {
-    pc = make_shared<Player>(); //
+    pc = make_shared<Shade>(); //
   } else if ( c == 'v') {
-    pc = make_shared<Player>();  //
+    pc = make_shared<Shade>();  //
   } else if (c == 't') {
-    pc = make_shared<Player>();
+    pc = make_shared<Shade>();
   } else if (c == 'g') {
-    pc = make_shared<Player>();
+    pc = make_shared<Shade>();
   } else {        // use Shade as default
     pc = make_shared<Shade>();
   }

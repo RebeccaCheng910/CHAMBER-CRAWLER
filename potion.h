@@ -5,16 +5,16 @@
 
 class Potion: public Object {
 	int type;
-	int effectHP;
-	int effectAtk;
-  int effectDef;
+	int effectHP = 0;
+        int effectAtk = 0;
+        int effectDef = 0;
 public:
 	Potion(int, int, int);
-  ~Potion();	
+        ~Potion();	
 	int getType();
 	int getEffectHP();
 	int getEffectAtk();
-  int getEffectDef();
+        int getEffectDef();
 };
 
 #endif

@@ -15,3 +15,5 @@ int Player::getDef() { return Def;}
 string Player::getAction() {return action;}
 void Player::setAction(string s) {action = s;}
 int Player::getGold() {return goldValue;}
+
+Player::~Player() {};  // virtual constructor

@@ -7,21 +7,20 @@ using namespace std;
 
 // constructor
 
-Potion::Potion (int row, int col, int t): Object(row, col, 'P') {
-	type = t;
+Potion::Potion (int row, int col, int t): Object(row, col, 'P'), type{t} {
 	// set effect of Potion
 	if (type == 0) {  // Restore Health (RH)
-		effectHP = 10;
+	  effectHP = 10;
 	} else if (type == 1) {  // Boost Attack (BA) 
-    effectAtk = 5;
-  } else if (type == 2) {  // Boost Defence (BD)
-		effectDef = 5;
+          effectAtk = 5;
+        } else if (type == 2) {  // Boost Defence (BD)
+	  effectDef = 5;
 	} else if (type == 3) {  // Poison Health (PH) 
-		effectHP = -10; 
+	  effectHP = -10; 
 	} else if (type == 4) {  // Wound Attack (WA)
-		effectAtk = -5;
+	  effectAtk = -5;
 	} else if (type == 5) {  // Wound Defence (WD)
-		effectDef = -5; 
+	  effectDef = -5; 
 	}
 }
 

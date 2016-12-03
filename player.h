@@ -15,6 +15,7 @@ public:
   std::string getAction();
   void setAction(std::string);
   virtual int getGold();   // goblin needs to overload
+  virtual ~Player() = 0;   // to make Player abstract
 };
 
 #endif

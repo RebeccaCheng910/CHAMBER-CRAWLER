@@ -6,6 +6,8 @@
 using namespace std;
 
 int main (int argc, char *argv[]) {
+  cin.exceptions(ios::failbit|ios::eofbit);
+ 
   srand(time(NULL));
   string filename;
   bool useDefault;
@@ -30,13 +32,15 @@ int main (int argc, char *argv[]) {
   // reads command
   string cmd;
   bool status = true;  
-  while (status) {   // game continues
-    cin >> cmd;
-    if (cmd == "no"|| cmd == "so"|| cmd == "ea"|| 
-        cmd == "we"|| cmd == "ne"|| cmd == "nw"|| cmd == "se"|| cmd == "sw") {
-      controller.move(cmd);
-    } else {
-       cout << "Invalid Command"  << endl;
-    }
-  }  
-}    
+  try {
+    while (status) {   // game continues    
+      cin >> cmd;
+      if (cmd == "no"|| cmd == "so"|| cmd == "ea"|| 
+       		 cmd == "we"|| cmd == "ne"|| cmd == "nw"|| cmd == "se"|| cmd == "sw") {
+      	 controller.move(cmd);
+      } else {
+       	 cout << "Invalid Command"  << endl;
+      }
+    } 
+  } catch(ios::failure) { } 
+ } 

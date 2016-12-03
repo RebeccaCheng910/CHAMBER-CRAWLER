@@ -8,3 +8,7 @@ Shade::Shade(): Player() {
   Def = 25;
   race = "Shade";
 }
+
+//int Shade::getHP() {return HP;}
+//int Shade::getAtk() {return Atk;}
+//int Shade::getDef() { return Def;}
