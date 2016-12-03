@@ -313,24 +313,25 @@ void Floor::movePlayer(int new_x, int new_y) {
 		int err = 1;
 		throw err;
 		td->setTD(x, y, '.');
-	} else if ((c == '.') || (c == '#') || (c == 'G')) {
+	} else if ((c == '.') || (c == '#') || (c == '+') || (c == 'G')) {
 		// if (c == 'G') 
     td->setTD(x + new_x, y + new_y, '@');
-		td->setTD(x, y, '.');
+		char original = theGrid[x][y]->getInfo().type;
+		td->setTD(x, y, original);
     pc->setCords(x + new_x, y + new_y);
-		pc->setAction(pc->getAction() + "PC moves");
+		pc->setAction("PC moves");
 		moveEnemy();
 		
 		for (int i = x+new_x-1; i <= x+new_x+1; ++i) {
 			for (int j = y+new_y-1; j <= y+new_y+1; ++j) {
      	// attck ......
      	if (td->getTD(i,j) == 'P') {
-        	pc->setAction(pc->getAction() + " and sees an known portion.");
-        	break;
+        	pc->setAction(pc->getAction() + " and sees an unknown portion.");
+        	return;
       	}
 			}
 		}
-	} else pc->setAction(pc->getAction() + "Invalid direction, PC's way is blocked.");
+	} else pc->setAction("Invalid direction, PC's way is blocked.");
 }
 
 
@@ -341,7 +342,7 @@ void Floor::moveObject(int old_x, int old_y, int new_x, int new_y, char symbol, 
 	e->setCords(new_x, new_y);
   e->setMove(true);
 }
-  	
+
 
 // output floor
 ostream &operator<< (ostream &out, const Floor &f) {

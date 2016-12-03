@@ -73,12 +73,6 @@ void Controller::printFloor() {
   cout << "Atk: " << pc->getAtk() << endl;
   cout << "Def: " << pc->getDef() << endl;
   cout << "Action: " << pc->getAction() << endl;
-<<<<<<< HEAD
-  floor->moveEnemy();
-  floor->movePlayer(-1,-1);
-	cout << *floor;
-=======
->>>>>>> d5febaff90f26cf76aad7cefa64232ef1acb4525
 }
 
 void Controller::move(string direction) {
@@ -101,7 +95,7 @@ void Controller::move(string direction) {
     x = 1; y = -1;
   }
   try {
-  //  floor->movePlayer();
+  	floor->movePlayer(x, y);
   } catch( const int n) {  // pc reaches staircase
     ++floorNum;
                   //
