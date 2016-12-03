@@ -4,6 +4,7 @@
 #include "character.h"
 #include <string>
 
+// abstract class
 class Player: public Character {
   int goldValue = 0;
   std::string action;

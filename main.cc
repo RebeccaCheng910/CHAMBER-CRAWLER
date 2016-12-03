@@ -5,6 +5,15 @@
 #include "time.h"
 using namespace std;
 
+// helper fucntion, check direction read
+bool check_direction(string direction) {
+  if (direction == "no"|| direction == "so"|| direction == "ea"||
+      direction == "we"|| direction == "ne"|| direction == "nw"|| direction == "se"|| direction == "sw")
+    return true;
+    return false;
+}
+
+
 int main (int argc, char *argv[]) {
   cin.exceptions(ios::failbit|ios::eofbit);
  
@@ -14,8 +23,7 @@ int main (int argc, char *argv[]) {
   if (argc == 1) { // use default file
     filename = "default.txt";
     useDefault = true;
-  }
-  else { // read in from file
+  }  else { // read in from file
     filename = argv[1];
     useDefault = false;
   }
@@ -30,17 +38,23 @@ int main (int argc, char *argv[]) {
   controller.printFloor();
 
   // reads command
-  string cmd;
+  string cmd,direction;
   bool status = true;  
   try {
     while (status) {   // game continues    
       cin >> cmd;
-      if (cmd == "no"|| cmd == "so"|| cmd == "ea"|| 
-       		 cmd == "we"|| cmd == "ne"|| cmd == "nw"|| cmd == "se"|| cmd == "sw") {
+      if (check_direction(cmd)) { // move PC
       	 controller.move(cmd);
+      } else if (cmd == "u") {  // use potion
+         cin >> direction; 
+         if (check_direction(direction)) {
+          // controller.usePotion(direction);
+         } else {  // direction not valid 
+           cout << "Invalid Direction" << endl;
+         }
       } else {
        	 cout << "Invalid Command"  << endl;
       }
     } 
   } catch(ios::failure) { } 
- } 
+} 
