@@ -58,7 +58,6 @@ Floor::~Floor() {}
 // set Floor's PC, pass by reference
 void Floor::setPlayer(shared_ptr<Player> &playerCharacter) {
   pc = playerCharacter;
-  cout << " HP is " << pc->getHP() << endl;
 }
   
 // set up chamber, add floor tiles to chamber

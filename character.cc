@@ -1,6 +1,7 @@
 #include "character.h"
 #include "object.h"
 #include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -8,4 +9,4 @@ using namespace std;
 Character::Character(int row, int col, char type): Object{row, col, type} {
 }
 
-
+string Character::getRace() { return race;}

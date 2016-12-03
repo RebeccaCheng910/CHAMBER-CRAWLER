@@ -6,6 +6,7 @@
 #include <memory>
 #include "character.h"
 #include "player.h"
+#include "shade.h"
 
 using namespace std;
 
@@ -42,7 +43,7 @@ void Controller::setRace(char c) {
   } else if (c == 'g') {
     pc = make_shared<Player>();
   } else {        // use Shade as default
-    pc = make_shared<Player>();
+    pc = make_shared<Shade>();
   }
   floor->setPlayer(pc);  // set floor's  pc
 }
@@ -60,4 +61,10 @@ void Controller::setBoard(){
  
 void Controller::printFloor() {
   cout << *floor;
+  cout << "Race: " << pc->getRace();
+  cout << " Gold: " << pc->getGold() << endl;
+  cout << "HP: " << pc->getHP() << endl;
+  cout << "Atk: " << pc->getAtk() << endl;
+  cout << "Def: " << pc->getDef() << endl;
+  cout << "Action: " << pc->getAction() << endl;
 }
