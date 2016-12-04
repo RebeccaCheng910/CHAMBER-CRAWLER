@@ -234,14 +234,13 @@ void Floor::generateEnemy() {
    }
  }
 
-// find pointer to Enemy with given row and col 
-shared_ptr<Enemy> Floor::getEnemy(int row, int col) {
-   int size = enemies.size();
-   for (int i = 0; i < size; ++i) {
-     if ((enemies[i]->getInfo().row == row) && (enemies[i]->getInfo().col == col)) {
-       return enemies[i];
+// find pointer in a vector given row and col
+template<typename T> T Floor::getPtr(int row, int col, vector<T> v) {
+   for (auto it = v.begin(); it != v.end(); ++it) {
+     if (((*it)->getInfo().row == row) && ((*it)->getInfo().col == col)) {
+       return *it;
      }
-	}
+   }
      return nullptr;
 }
 
@@ -256,7 +255,7 @@ void Floor::moveEnemy() {
      for (int j = 0; j < col; ++j) {
 				 char symbol = td->getTD(i, j);
          if ((symbol == 'H')||(symbol == 'W')||(symbol == 'E')||(symbol == 'O')||(symbol == 'M')||(symbol == 'L')) {
-            shared_ptr <Enemy> e = getEnemy(i, j);
+            shared_ptr <Enemy> e = getPtr<shared_ptr<Enemy>>(i, j, enemies);
 						vector <int> directions;
             // cout << "enemy's current position: " << i << " " << j << endl;
              if (e != nullptr && e->getMove() != true) {                              
@@ -302,7 +301,7 @@ void Floor::moveEnemy() {
 				} 
 			}
 	 }
- }
+ }te<typename T> T Floor::getPtr(int row, int col, vector<T> v)
 }
 
 // move pc according to command of game players (no, so, ea, we,ne, nw, se, sw) 
@@ -354,8 +353,8 @@ void Floor::usePotion(int x, int y) {
     pc->setAction("Potion not found.");
     return;
   } else {
-    pc->setAction("PC used potion().");
     td->setTD(row+x, col+y, theGrid[row+x][col+y]->getInfo().type);
+    pc->setAction("PC used potion().");
   }
 }
 
