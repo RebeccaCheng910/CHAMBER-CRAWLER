@@ -2,6 +2,9 @@
 #define _ENEMY_H_
 
 #include "character.h"
+#include <memory>
+
+class Player;
 
 class Enemy:public Character{
 	bool hasMoved;
@@ -12,6 +15,7 @@ public:
   int getHP() override;
   int getAtk() override;
   int getDef() override;
+  virtual bool beAttackedBy(shared_ptr<Player> &);
 };
 
 #endif
