@@ -5,16 +5,12 @@
 
 class Potion: public Object {
 	int type;
-	int effectHP = 0;
-        int effectAtk = 0;
-        int effectDef = 0;
+	std::string name;
 public:
 	Potion(int, int, int);
         ~Potion();	
 	int getType();
-	int getEffectHP();
-	int getEffectAtk();
-        int getEffectDef();
+	std::string getName();
 };
 
 #endif

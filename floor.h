@@ -47,7 +47,7 @@ public:
   void generate();  // random generate pc's position and enemies
   void moveEnemy();
   void movePlayer(int, int);  // move pc's position given direction
-  void usePotion(int, int);   // use potion given direcion
+  std::shared_ptr<Player> &usePotion(int, int);   // use potion given direcion
   friend std::ostream &operator<<(std::ostream &out, const Floor &f);
 };
 

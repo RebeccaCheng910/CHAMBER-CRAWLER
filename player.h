@@ -8,11 +8,13 @@
 class Player: public Character {
   int goldValue = 0;
   std::string action;
+protected:
+  int maxHP;
 public:
   Player(); // constructor
-  int getHP() override;
-  int getAtk() override;
-  int getDef() override;
+ // int getHP() override;
+ // int getAtk() override;
+//  int getDef() override;
   std::string getAction();
   void setAction(std::string);
   virtual int getGold();   // goblin needs to overload

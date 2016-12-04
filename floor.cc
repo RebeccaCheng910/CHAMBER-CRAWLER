@@ -14,6 +14,7 @@
 #include "potion.h"
 #include <cstdlib>
 #include <stdexcept>
+#include "potioneffect.h"
 
 using namespace std;
 
@@ -301,7 +302,7 @@ void Floor::moveEnemy() {
 				} 
 			}
 	 }
- }te<typename T> T Floor::getPtr(int row, int col, vector<T> v)
+ }
 }
 
 // move pc according to command of game players (no, so, ea, we,ne, nw, se, sw) 
@@ -345,17 +346,25 @@ void Floor::moveObject(int old_x, int old_y, int new_x, int new_y, char symbol, 
 
 
 // use Potion given direction
-void Floor::usePotion(int x, int y) {
+shared_ptr<Player> &Floor::usePotion(int x, int y) {
   // return Pc's current position
   int row = pc->getInfo().row;
   int col = pc->getInfo().col;
+  // get potion's position
+  int p_row = row + x;
+  int p_col = col + y;
   if (td->getTD(row+x, col+y) != 'P') {
     pc->setAction("Potion not found.");
-    return;
   } else {
-    td->setTD(row+x, col+y, theGrid[row+x][col+y]->getInfo().type);
-    pc->setAction("PC used potion().");
+    shared_ptr<Potion> p = getPtr<shared_ptr<Potion>>(p_row, p_col, potions);
+    pc = make_shared<PotionEffect>(p->getType(),pc);
+    td->setTD(p_row, p_col, theGrid[p_row][p_col]->getInfo().type);
+    pc->setAction("PC used a potion(" + p->getName() + ").");
+    //cout << "Atk: " << pc->getAtk() << endl;
+    //cout << "Def: " << pc->getDef() << endl;
+    //cout << "Action: " << pc->getAction() << endl;
   }
+  return pc;
 }
 
 

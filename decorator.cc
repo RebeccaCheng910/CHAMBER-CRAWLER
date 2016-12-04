@@ -1,5 +1,8 @@
 #include "decorator.h"
 #include "player.h"
+#include <memory>
+
+using namespace std;
 
 // constructor
-Decorator::Decorator(Player *p):Player{}, component{p} {}
+Decorator::Decorator(shared_ptr<Player> p):Player{*p}, component{p} {}

@@ -1,12 +1,15 @@
 #ifndef _DECORATOR_H_
 #define _DECORATOR_H_
 
+#include <memory>
 #include "player.h"
 
 // abstract class
-class Decorator: public player {
+class Decorator: public Player {
 protected:
-  Player *component;
+  std::shared_ptr<Player> component;
 public:
-  Decorator(Player *p);  // constructor
+  Decorator(std::shared_ptr<Player>);  // constructor
 };
+
+#endif

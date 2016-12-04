@@ -7,6 +7,7 @@ Shade::Shade(): Player() {
   Atk = 25;
   Def = 25;
   race = "Shade";
+  maxHP = 125;
 }
 
 //int Shade::getHP() {return HP;}

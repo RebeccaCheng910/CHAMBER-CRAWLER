@@ -10,10 +10,11 @@ protected:
   std::string race;
 public:
   Character(int, int, char);
-  virtual int getHP() = 0;    // get character's HP
-  virtual int getAtk() = 0;   // get character's Atk
-  virtual int getDef() = 0;  // get character's Def
+  virtual int getHP();    // get character's HP
+  virtual int getAtk();   // get character's Atk
+  virtual int getDef();  // get character's Def
   std::string getRace();     // get character's racee
+  virtual ~Character() = 0;   
 };
 
 #endif

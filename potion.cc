@@ -10,17 +10,17 @@ using namespace std;
 Potion::Potion (int row, int col, int t): Object(row, col, 'P'), type{t} {
 	// set effect of Potion
 	if (type == 0) {  // Restore Health (RH)
-	  effectHP = 10;
+	  name = "RH";
 	} else if (type == 1) {  // Boost Attack (BA) 
-          effectAtk = 5;
+          name = "BA";
         } else if (type == 2) {  // Boost Defence (BD)
-	  effectDef = 5;
+	  name = "BD";
 	} else if (type == 3) {  // Poison Health (PH) 
-	  effectHP = -10; 
+	  name = "PH"; 
 	} else if (type == 4) {  // Wound Attack (WA)
-	  effectAtk = -5;
+	  name = "WA";
 	} else if (type == 5) {  // Wound Defence (WD)
-	  effectDef = -5; 
+	  name = "WD";
 	}
 }
 
@@ -30,7 +30,4 @@ Potion::~Potion() {}
 
 // accessor 
 int Potion::getType() {return type;}
-int Potion::getEffectHP() {return effectHP;}
-int Potion::getEffectAtk() {return effectAtk;}
-int Potion::getEffectDef() {return effectDef;}
-
+string Potion::getName() {return name;}

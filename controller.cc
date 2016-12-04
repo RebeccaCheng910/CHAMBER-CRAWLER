@@ -120,7 +120,7 @@ void Controller::usePotion(string direction)  {
   if (p.first == 0 && p.second == 0) {
     pc->setAction("Invalid direction");
   } else {
-    floor->usePotion(p.first, p.second);
+    pc = floor->usePotion(p.first, p.second);
   }
   printFloor();
 } 
