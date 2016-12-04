@@ -5,12 +5,12 @@
 
 using namespace std;
 
-TextDisplay::TextDisplay(istream *in) {
+TextDisplay::TextDisplay(istream &in) {
   for (int i = 0; i < 25; ++i) {
     vector<char> v;
     theDisplay.emplace_back(v);
     string line;
-    getline(*in, line);
+    getline(in, line);
     for (int j = 0; j < 79; ++j) {
       char c;
       // translate numbers to items

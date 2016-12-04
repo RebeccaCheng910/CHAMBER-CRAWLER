@@ -14,7 +14,7 @@ using namespace std;
 // convert direction to a pair of inte(x, y)
 tuple<int, int, string> convert_direc(string direction) {
   int x,y;
-	string s;
+  string s;
   
    if (direction == "no") {
      x = -1; y = 0; s = "North";
@@ -117,11 +117,16 @@ void Controller::move(string direction) {
 
 // attack enemy in gievn direction 
 bool Controller::attack(string direction) {
-	tuple<int, int, string> p = convert_direc(direction);
-	bool success = true;
-	if (get<0>(p) == 0 && get<1>(p) == 0) {
-    pc->setAction("Invalid direction");
+  tuple<int, int, string> p = convert_direc(direction);
+  bool success = true;
+    if (get<0>(p) == 0 && get<1>(p) == 0) {
+      pc->setAction("Invalid direction");
+    }  else {
+	floor->attack(get<0>(p), get<1>(p));
+        if (!pc->getStatus()) {
+    	  floor->moveEnemy(get<0>(p), get<1>(p));
 	} else {
+<<<<<<< HEAD
 		floor->attack(get<0>(p), get<1>(p));
     if (!pc->getStatus()) {
     	floor->moveEnemy(get<0>(p), get<1>(p));
@@ -132,6 +137,14 @@ bool Controller::attack(string direction) {
 	}
 	printFloor();
   return success;
+=======
+       	  pc->setAction("You are Dead.");
+	  success = false;
+        }
+      }
+      printFloor();
+      return success;
+>>>>>>> 3aa7e9247108528668644c03c5a7ad39a2efa5f5
 }
 
 
@@ -144,11 +157,18 @@ bool Controller::usePotion(string direction)  {
   } else {
     pc = floor->usePotion(get<0>(p), get<1>(p));
     if (pc->getStatus()) {
+<<<<<<< HEAD
 			pc->setAction("PC is poisoned by Potion to death.");
 			success = false;
 			
   	}
 	}
+=======
+        pc->setAction("You are Dead.");
+	success = false;
+     }
+  }
+>>>>>>> 3aa7e9247108528668644c03c5a7ad39a2efa5f5
   printFloor();
-	return success;
+  return success;
 } 
