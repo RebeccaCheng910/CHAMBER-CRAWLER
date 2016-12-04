@@ -34,6 +34,8 @@ class Floor {
   void generateGold();
   void generateEnemy();
 
+  void moveObject(int, int, int, int, char, const std::shared_ptr<Enemy>&);
+
 public: 
   Floor(std::string); // constructor
   ~Floor();  // destructor
@@ -44,8 +46,8 @@ public:
   void generate();  // random generate pc's position and enemies
   void moveEnemy();
   std::shared_ptr<Enemy> getEnemy(int, int);
-  void movePlayer(int, int);
-  void moveObject(int, int, int, int, char, const std::shared_ptr<Enemy>&);
+  void movePlayer(int, int);  // move pc's position given direction
+  void usePotion(int, int);   // use potion given direcion
   friend std::ostream &operator<<(std::ostream &out, const Floor &f);
 };
 

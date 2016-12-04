@@ -118,9 +118,10 @@ void Controller::move(string direction) {
 void Controller::usePotion(string direction)  {
   pair<int, int> p = convert_direc(direction);
   if (p.first == 0 && p.second == 0) {
-    cout << "Invalid direction" << endl;
+    pc->setAction("Invalid direction");
   } else {
-   // floor->
+    floor->usePotion(p.first, p.second);
   }
+  printFloor();
 } 
 

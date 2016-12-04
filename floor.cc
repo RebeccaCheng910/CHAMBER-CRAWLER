@@ -53,7 +53,8 @@ Floor::Floor(string filename) {
   findChamber();
 } 
 
-Floor::~Floor() {} 
+
+Floor::~Floor() {}
 
 // set Floor's PC, pass by reference
 void Floor::setPlayer(shared_ptr<Player> &playerCharacter) {
@@ -148,10 +149,10 @@ void Floor::readFile(istream &in) {
       } else if (c == 7) {  // small hoard
 	golds.emplace_back(make_shared<Gold>(i, j, 7));
 	++goldCount; 
-	} else if (c == 8) {  // merchant hoard
+      } else if (c == 8) {  // merchant hoard
         golds.emplace_back(make_shared<Gold>(i, j, 10));
 	++goldCount;
-			} else if (c == 9) {   // dragon hoard
+	} else if (c == 9) {   // dragon hoard
 				golds.emplace_back(make_shared<Gold>(i, j, 5));
         ++goldCount;
      }
@@ -340,8 +341,24 @@ void Floor::moveObject(int old_x, int old_y, int new_x, int new_y, char symbol, 
 	td->setTD(old_x, old_y, '.');
 	td->setTD(new_x, new_y, symbol);
 	e->setCords(new_x, new_y);
-  e->setMove(true);
+        e->setMove(true);
 }
+
+
+// use Potion given direction
+void Floor::usePotion(int x, int y) {
+  // return Pc's current position
+  int row = pc->getInfo().row;
+  int col = pc->getInfo().col;
+  if (td->getTD(row+x, col+y) != 'P') {
+    pc->setAction("Potion not found.");
+    return;
+  } else {
+    pc->setAction("PC used potion().");
+    td->setTD(row+x, col+y, theGrid[row+x][col+y]->getInfo().type);
+  }
+}
+
 
 
 // output floor
