@@ -126,7 +126,7 @@ bool Controller::attack(string direction) {
     if (!pc->getStatus()) {
     	floor->moveEnemy(get<0>(p), get<1>(p));
 		} else {
-			pc->setAction("You are Dead.");
+			pc->setAction("PC is defeated by Enemy.");
 			success = false;
 		}
 	}
@@ -142,18 +142,13 @@ bool Controller::usePotion(string direction)  {
   if (get<0>(p) == 0 && get<1>(p) == 0) {
     pc->setAction("Invalid direction");
   } else {
-<<<<<<< HEAD
-    pc = floor->usePotion(p.first, p.second);
-  }
-=======
-    floor->usePotion(get<0>(p), get<1>(p));
-		if (pc->getStatus()) {
-			pc->setAction("You are Dead.");
+    pc = floor->usePotion(get<0>(p), get<1>(p));
+    if (pc->getStatus()) {
+			pc->setAction("PC is poisoned by Potion to death.");
 			success = false;
 			
   	}
 	}
->>>>>>> 93c56744b77410be029bad1955d22136461abc94
   printFloor();
 	return success;
 } 

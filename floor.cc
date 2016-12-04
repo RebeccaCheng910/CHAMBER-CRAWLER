@@ -334,6 +334,7 @@ void Floor::movePlayer(int new_x, int new_y, string dir) {
 	int x = pc->getInfo().row;
   int y = pc->getInfo().col;
   char c = td->getTD(x + new_x, y + new_y);
+  string actionStr = "";
   if (c == '\\') {
 		int err = 1;
 		throw err;
@@ -342,17 +343,25 @@ void Floor::movePlayer(int new_x, int new_y, string dir) {
 		// if G is in given direction 
 		if (c == 'G') {
 			shared_ptr <Gold> g = find<shared_ptr<Gold>>(x+new_x, y+new_y, golds);
-			if (g && (g->getGold() == false)) {pc->setGold(pc->getGold() + g->getValue());}
+			if (g && (g->getGold() == false)) {
+				// dragon hoard is not protected 
+				int val = g->getValue();  // gold value
+        string name;   // gold description
+				pc->setGold(pc->getGold() + val);
+        if (val == 2) name = "normal pile";
+        else if (val == 1) name = "small hoard";
+        else if (val == 5) name = "dragon hoard";
+        else if (val == 4) name = "merchant hoard";
+        actionStr = "A " + name + " is picked up. ";
+			}
 			else return;   // dragon hoard
     }
     td->setTD(x + new_x, y + new_y, '@');
 		char original = theGrid[x][y]->getInfo().type;
 		td->setTD(x, y, original);
     pc->setCords(x + new_x, y + new_y);
-		string actionStr = "PC moves " + dir;
+		actionStr += "PC moves " + dir;
 		pc->setAction(actionStr);
-		moveEnemy(0,0);
-    enemiesAttack(x + new_x, y + new_y);
 		for (int i = x+new_x-1; i <= x+new_x+1; ++i) {
 			for (int j = y+new_y-1; j <= y+new_y+1; ++j) {
      	if (td->getTD(i,j) == 'P') {
@@ -361,7 +370,9 @@ void Floor::movePlayer(int new_x, int new_y, string dir) {
 			}
 			}
 		}
-		pc->setAction(pc->getAction() + ".");
+		pc->setAction(pc->getAction() + ". ");
+		moveEnemy(0,0);
+    enemiesAttack(x + new_x, y + new_y);
 	} else pc->setAction("Invalid direction, PC's way is blocked.");
 }
 
@@ -408,7 +419,7 @@ shared_ptr<Player> &Floor::usePotion(int x, int y) {
   if (td->getTD(row+x, col+y) != 'P') {
     pc->setAction("Potion not found.");
   } else {
-    shared_ptr<Potion> p = getPtr<shared_ptr<Potion>>(p_row, p_col, potions);
+    shared_ptr<Potion> p = find<shared_ptr<Potion>>(p_row, p_col, potions);
     pc = make_shared<PotionEffect>(p->getType(),pc);
     td->setTD(p_row, p_col, theGrid[p_row][p_col]->getInfo().type);
     pc->setAction("PC used a potion(" + p->getName() + ").");
