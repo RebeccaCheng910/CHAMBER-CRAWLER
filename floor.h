@@ -35,6 +35,7 @@ class Floor {
   void generateEnemy();
 
   void moveObject(int, int, int, int, char, const std::shared_ptr<Enemy>&);
+  template<typename T> T getPtr(int, int, std::vector<T>);
 
 public: 
   Floor(std::string); // constructor
@@ -45,7 +46,6 @@ public:
   void readFile(std::istream &) ; // read in from file and create objects
   void generate();  // random generate pc's position and enemies
   void moveEnemy();
-  std::shared_ptr<Enemy> getEnemy(int, int);
   void movePlayer(int, int);  // move pc's position given direction
   void usePotion(int, int);   // use potion given direcion
   friend std::ostream &operator<<(std::ostream &out, const Floor &f);
