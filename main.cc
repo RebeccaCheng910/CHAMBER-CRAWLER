@@ -41,6 +41,9 @@ int main (int argc, char *argv[]) {
       } else if (cmd == "u") {  // use potion
          cin >> direction; 
          controller.usePotion(direction);
+			} else if (cmd == "a") {  // attack enemy
+				 cin >> direction;
+				 controller.attack(direction);
       } else {
        	 cout << "Invalid Command"  << endl;
       }

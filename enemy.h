@@ -15,7 +15,7 @@ public:
   int getHP() override;
   int getAtk() override;
   int getDef() override;
-  virtual bool beAttackedBy(shared_ptr<Player> &);
+  virtual bool beAttackedBy(const std::shared_ptr<Player> &);
 };
 
 #endif

@@ -18,6 +18,7 @@ public:
   void setRace(char);  // read from input and set race
   void setBoard();  // generate enemies and items
   void move(std::string);  // move the PC
-  void usePotion(std::string);
+  void attack(std::string);
+	void usePotion(std::string);
   void printFloor(); // output the floor
 };

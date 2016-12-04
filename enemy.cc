@@ -1,8 +1,12 @@
 #include "enemy.h"
 #include "character.h"
+#include "player.h"
+#include "info.h"
 #include <cmath>
 #include <cstdlib>
 #include <memory>
+#include <string>
+#include <sstream>
 
 using namespace std;
 
@@ -19,19 +23,27 @@ int Enemy::getHP() { return HP;}
 int Enemy::getAtk() {return Atk;}
 int Enemy::getDef() {return Def;}
 
-bool Enemy::beAttackedBy(shared_ptr<Player> pc) {
+bool Enemy::beAttackedBy(const shared_ptr<Player> &pc) {
 	int atk = pc->getAtk();
 	int def = pc->getDef();
-	double damage = ceil((100 / (100 + def)) * atk);
-	HP -= damage;
-  pcAction = "PC deals " + damage + " damage to " + getInfo().type + ". ";
-	pc->setAction(pcAction);
-
+	double d = (100 + def);
+	d = (100 / d);
+	d = d * atk;
+  double damage = ceil(d);
+  stringstream s;
+	int chance = rand() % 2;
+	if ((getInfo().type == 'L') && (chance == 0)) {    // when halfling causes pc to miss the attack 
+		s << "PC missed " << getInfo().type << " (" << HP << " HP). ";
+	} else {
+		HP -= damage;
+		s << "PC deals " << damage << " damage to " << getInfo().type << " (" << HP << " HP). ";
+  }
+  
+  pc->setAction(s.str());
+  
 	if (HP <= 0) {
 		HP = 0;
-    pc->setAction("PC slained the Enemy. ")
-		return true;
-	} else {
+    return true;
+	} 
 		return false;
-	}
 }
