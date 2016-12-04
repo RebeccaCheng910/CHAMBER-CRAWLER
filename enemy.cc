@@ -36,13 +36,13 @@ bool Enemy::beAttackedBy(const shared_ptr<Player> &pc) {
 		s << "PC missed " << getInfo().type << " (" << HP << " HP). ";
 	} else {
 		HP -= damage;
+    if (HP <= 0) {HP = 0;}
 		s << "PC deals " << damage << " damage to " << getInfo().type << " (" << HP << " HP). ";
   }
   
   pc->setAction(s.str());
   
-	if (HP <= 0) {
-		HP = 0;
+	if (HP == 0) {
     return true;
 	} 
 		return false;

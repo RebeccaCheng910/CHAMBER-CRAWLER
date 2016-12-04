@@ -237,18 +237,20 @@ void Floor::generateEnemy() {
 // find pointer in a vector given row and col
 template<typename T> T Floor::find(int row, int col, vector<T> v) {
    for (auto it = v.begin(); it != v.end(); ++it) {
-     if (((*it)->getInfo().row == row) && ((*it)->getInfo().col == col)) {
-       return *it;
+		if ((*it) == nullptr) break;
+		char c = td->getTD(row, col);
+    if (((*it)->getInfo().row == row) && ((*it)->getInfo().col == col) && (c != '.')) {
+				return *it;
      }
-   }
-     return nullptr;
+   } 
+    return nullptr;
 }
 
  
 // move all enemies starts from leftmost and upmost
 void Floor::moveEnemy(int x, int y) {
   for (auto it = enemies.begin(); it < enemies.end(); ++it) {
-		(*it)->setMove(false);
+		if (*it) {(*it)->setMove(false);}
   }
 
   if ((x == 0) && (y == 0)) {}
@@ -256,7 +258,7 @@ void Floor::moveEnemy(int x, int y) {
 		int row = pc->getInfo().row;
 		int col = pc->getInfo().col;
 		shared_ptr <Enemy> noMove = find<shared_ptr<Enemy>>(row+x, col+y, enemies);
-		noMove->setMove(true);  // Enemy will not move if it is in a combat
+		if (noMove) {noMove->setMove(true);} // Enemy will not move if it is in a combat
   }
   
 	char c = '.';
@@ -267,7 +269,7 @@ void Floor::moveEnemy(int x, int y) {
             shared_ptr <Enemy> e = find<shared_ptr<Enemy>>(i, j, enemies);
 						vector <int> directions;
             // cout << "enemy's current position: " << i << " " << j << endl;
-             if (e != nullptr && e->getMove() != true) {                              
+             if (e && e->getMove() != true) {                              
 								if (td->getTD(i,j+1) == c) {
                  directions.emplace_back(0);  // west
                 }
@@ -318,7 +320,7 @@ void Floor::enemiesAttack(int x, int y) {
 	for (int i = x-1;i <= x+1; ++i) {
 		for (int j = y-1; j <= y+1; ++j) {
 			shared_ptr <Enemy> e = find<shared_ptr<Enemy>>(i, j, enemies);
-			if (e != nullptr) {
+			if (e) {
 				pc->beAttackedBy(e);
 				return;
 			}
@@ -371,17 +373,19 @@ void Floor::attack(int x, int y) {
 	int row = pc->getInfo().row;
   int col = pc->getInfo().col;
 	shared_ptr <Enemy> e = find<shared_ptr<Enemy>>(row+x, col+y, enemies);
-  
-	if (e != nullptr) {
+	if (e) { 
 		bool dead = e->beAttackedBy(pc);
 		if (dead) {
 			pc->setAction(pc->getAction() + "Enemy is slained.");
 			td->setTD(e->getInfo().row, e->getInfo().col, '.'); 
-      // 
+			e = nullptr;
 		} else {
 			pc->beAttackedBy(e);
 		}
-	} else {pc->setAction("Enemy not found.");}
+	} 
+	else {
+		pc->setAction("Enemy not found.");
+	}
 }
 
 
