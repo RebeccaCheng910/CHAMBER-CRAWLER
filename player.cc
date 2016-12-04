@@ -21,6 +21,8 @@ int Player::getDef() { return Def;}
 string Player::getAction() {return action;}
 void Player::setAction(string s) {action = s;}
 int Player::getGold() {return goldValue;}
+void Player::setGold(int values) {goldValue += values;}
+bool Player::getStatus() {return isDead;}
 
 void Player::beAttackedBy(const shared_ptr<Enemy> &e) {
 	int atk = e->getAtk();
@@ -53,7 +55,10 @@ void Player::beAttackedBy(const shared_ptr<Enemy> &e) {
   }
   setAction(getAction() + s.str());
   
-  if (HP <= 0) {HP = 0;}
+  if (HP <= 0) {
+		HP = 0;
+    isDead = true;
+	}
 } 
     
   	

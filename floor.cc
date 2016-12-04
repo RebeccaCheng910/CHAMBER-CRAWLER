@@ -338,12 +338,17 @@ void Floor::movePlayer(int new_x, int new_y, string dir) {
 		throw err;
 		td->setTD(x, y, '.');
 	} else if ((c == '.') || (c == '#') || (c == '+') || (c == 'G')) {
-		// if (c == 'G') 
+		// if G is in given direction 
+		if (c == 'G') {
+			shared_ptr <Gold> g = find<shared_ptr<Gold>>(x+new_x, y+new_y, golds);
+			if (g && (g->getGold() == false)) {pc->setGold(pc->getGold() + g->getValue());}
+			else return;   // dragon hoard
+    }
     td->setTD(x + new_x, y + new_y, '@');
 		char original = theGrid[x][y]->getInfo().type;
 		td->setTD(x, y, original);
     pc->setCords(x + new_x, y + new_y);
-		string actionStr = "PC moves " + dir + ". ";
+		string actionStr = "PC moves " + dir;
 		pc->setAction(actionStr);
 		moveEnemy(0,0);
     enemiesAttack(x + new_x, y + new_y);
@@ -352,9 +357,10 @@ void Floor::movePlayer(int new_x, int new_y, string dir) {
      	if (td->getTD(i,j) == 'P') {
         	pc->setAction(pc->getAction() + " and sees an unknown portion.");
         	return;
-      	}
+			}
 			}
 		}
+		pc->setAction(pc->getAction() + ".");
 	} else pc->setAction("Invalid direction, PC's way is blocked.");
 }
 
@@ -403,6 +409,7 @@ void Floor::usePotion(int x, int y) {
     pc->setAction("PC used potion().");
   }
 }
+
 
 
 

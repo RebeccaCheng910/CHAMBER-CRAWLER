@@ -116,25 +116,39 @@ void Controller::move(string direction) {
 }
 
 // attack enemy in gievn direction 
-void Controller::attack(string direction) {
+bool Controller::attack(string direction) {
 	tuple<int, int, string> p = convert_direc(direction);
+	bool success = true;
 	if (get<0>(p) == 0 && get<1>(p) == 0) {
     pc->setAction("Invalid direction");
 	} else {
 		floor->attack(get<0>(p), get<1>(p));
-    floor->moveEnemy(get<0>(p), get<1>(p));
+    if (!pc->getStatus()) {
+    	floor->moveEnemy(get<0>(p), get<1>(p));
+		} else {
+			pc->setAction("You are Dead.");
+			success = false;
+		}
 	}
 	printFloor();
+  return success;
 }
 
 
 // use potion in direction
-void Controller::usePotion(string direction)  {
+bool Controller::usePotion(string direction)  {
   tuple<int, int, string> p = convert_direc(direction);
+	bool success = true;
   if (get<0>(p) == 0 && get<1>(p) == 0) {
     pc->setAction("Invalid direction");
   } else {
     floor->usePotion(get<0>(p), get<1>(p));
-  }
+		if (pc->getStatus()) {
+			pc->setAction("You are Dead.");
+			success = false;
+			
+  	}
+	}
   printFloor();
+	return success;
 } 

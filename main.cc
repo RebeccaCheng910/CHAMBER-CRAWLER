@@ -4,7 +4,7 @@
 #include "controller.h"
 #include "time.h"
 using namespace std;
-
+	
 
 int main (int argc, char *argv[]) {
   cin.exceptions(ios::failbit|ios::eofbit);
@@ -31,7 +31,8 @@ int main (int argc, char *argv[]) {
 
   // reads command
   string cmd,direction;
-  bool status = true;  
+  bool status = true;
+  bool success = true;  
   try {
     while (status) {   // game continues    
       cin >> cmd;
@@ -40,13 +41,20 @@ int main (int argc, char *argv[]) {
       	 controller.move(cmd);
       } else if (cmd == "u") {  // use potion
          cin >> direction; 
-         controller.usePotion(direction);
+         success = controller.usePotion(direction);
 			} else if (cmd == "a") {  // attack enemy
 				 cin >> direction;
-				 controller.attack(direction);
+				 success = controller.attack(direction);
       } else {
        	 cout << "Invalid Command"  << endl;
       }
+			if (!success) {
+				cout << "Enter (q) to quit or (r) to restart." << endl;
+				string choice;
+				cin >> choice;
+				if (choice == "q") return 1;
+        else if (choice == "r") {}
+			}		
     } 
   } catch(ios::failure) { } 
 } 
