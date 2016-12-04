@@ -408,13 +408,10 @@ shared_ptr<Player> &Floor::usePotion(int x, int y) {
   if (td->getTD(row+x, col+y) != 'P') {
     pc->setAction("Potion not found.");
   } else {
-    shared_ptr<Potion> p = getPtr<shared_ptr<Potion>>(p_row, p_col, potions);
+    shared_ptr<Potion> p = find<shared_ptr<Potion>>(p_row, p_col, potions);
     pc = make_shared<PotionEffect>(p->getType(),pc);
     td->setTD(p_row, p_col, theGrid[p_row][p_col]->getInfo().type);
     pc->setAction("PC used a potion(" + p->getName() + ").");
-    //cout << "Atk: " << pc->getAtk() << endl;
-    //cout << "Def: " << pc->getDef() << endl;
-    //cout << "Action: " << pc->getAction() << endl;
   }
   return pc;
 }
