@@ -236,30 +236,41 @@ void Floor::generateEnemy() {
  }
 
 // find pointer in a vector given row and col
-template<typename T> T Floor::getPtr(int row, int col, vector<T> v) {
+template<typename T> T Floor::find(int row, int col, vector<T> v) {
    for (auto it = v.begin(); it != v.end(); ++it) {
-     if (((*it)->getInfo().row == row) && ((*it)->getInfo().col == col)) {
-       return *it;
+		if ((*it) == nullptr) break;
+		char c = td->getTD(row, col);
+    if (((*it)->getInfo().row == row) && ((*it)->getInfo().col == col) && (c != '.')) {
+				return *it;
      }
-   }
-     return nullptr;
+   } 
+    return nullptr;
 }
 
  
 // move all enemies starts from leftmost and upmost
-void Floor::moveEnemy() {
+void Floor::moveEnemy(int x, int y) {
   for (auto it = enemies.begin(); it < enemies.end(); ++it) {
-		(*it)->setMove(false);
+		if (*it) {(*it)->setMove(false);}
   }
-   char c = '.';
+
+  if ((x == 0) && (y == 0)) {}
+  else  {
+		int row = pc->getInfo().row;
+		int col = pc->getInfo().col;
+		shared_ptr <Enemy> noMove = find<shared_ptr<Enemy>>(row+x, col+y, enemies);
+		if (noMove) {noMove->setMove(true);} // Enemy will not move if it is in a combat
+  }
+  
+	char c = '.';
    for (int i = 0; i < row; ++i) {
      for (int j = 0; j < col; ++j) {
 				 char symbol = td->getTD(i, j);
          if ((symbol == 'H')||(symbol == 'W')||(symbol == 'E')||(symbol == 'O')||(symbol == 'M')||(symbol == 'L')) {
-            shared_ptr <Enemy> e = getPtr<shared_ptr<Enemy>>(i, j, enemies);
+            shared_ptr <Enemy> e = find<shared_ptr<Enemy>>(i, j, enemies);
 						vector <int> directions;
             // cout << "enemy's current position: " << i << " " << j << endl;
-             if (e != nullptr && e->getMove() != true) {                              
+             if (e && e->getMove() != true) {                              
 								if (td->getTD(i,j+1) == c) {
                  directions.emplace_back(0);  // west
                 }
@@ -305,8 +316,21 @@ void Floor::moveEnemy() {
  }
 }
 
+// check player in range for attack 
+void Floor::enemiesAttack(int x, int y) {
+	for (int i = x-1;i <= x+1; ++i) {
+		for (int j = y-1; j <= y+1; ++j) {
+			shared_ptr <Enemy> e = find<shared_ptr<Enemy>>(i, j, enemies);
+			if (e) {
+				pc->beAttackedBy(e);
+				return;
+			}
+		}
+	}
+} 
+
 // move pc according to command of game players (no, so, ea, we,ne, nw, se, sw) 
-void Floor::movePlayer(int new_x, int new_y) {
+void Floor::movePlayer(int new_x, int new_y, string dir) {
 	int x = pc->getInfo().row;
   int y = pc->getInfo().col;
   char c = td->getTD(x + new_x, y + new_y);
@@ -315,23 +339,29 @@ void Floor::movePlayer(int new_x, int new_y) {
 		throw err;
 		td->setTD(x, y, '.');
 	} else if ((c == '.') || (c == '#') || (c == '+') || (c == 'G')) {
-		// if (c == 'G') 
+		// if G is in given direction 
+		if (c == 'G') {
+			shared_ptr <Gold> g = find<shared_ptr<Gold>>(x+new_x, y+new_y, golds);
+			if (g && (g->getGold() == false)) {pc->setGold(pc->getGold() + g->getValue());}
+			else return;   // dragon hoard
+    }
     td->setTD(x + new_x, y + new_y, '@');
 		char original = theGrid[x][y]->getInfo().type;
 		td->setTD(x, y, original);
     pc->setCords(x + new_x, y + new_y);
-		pc->setAction("PC moves");
-		moveEnemy();
-		
+		string actionStr = "PC moves " + dir;
+		pc->setAction(actionStr);
+		moveEnemy(0,0);
+    enemiesAttack(x + new_x, y + new_y);
 		for (int i = x+new_x-1; i <= x+new_x+1; ++i) {
 			for (int j = y+new_y-1; j <= y+new_y+1; ++j) {
-     	// attck ......
      	if (td->getTD(i,j) == 'P') {
         	pc->setAction(pc->getAction() + " and sees an unknown portion.");
         	return;
-      	}
+			}
 			}
 		}
+		pc->setAction(pc->getAction() + ".");
 	} else pc->setAction("Invalid direction, PC's way is blocked.");
 }
 
@@ -343,6 +373,28 @@ void Floor::moveObject(int old_x, int old_y, int new_x, int new_y, char symbol, 
 	e->setCords(new_x, new_y);
         e->setMove(true);
 }
+
+
+// attack Enemy given direction 
+void Floor::attack(int x, int y) {
+	int row = pc->getInfo().row;
+  int col = pc->getInfo().col;
+	shared_ptr <Enemy> e = find<shared_ptr<Enemy>>(row+x, col+y, enemies);
+	if (e) { 
+		bool dead = e->beAttackedBy(pc);
+		if (dead) {
+			pc->setAction(pc->getAction() + "Enemy is slained.");
+			td->setTD(e->getInfo().row, e->getInfo().col, '.'); 
+			e = nullptr;
+		} else {
+			pc->beAttackedBy(e);
+		}
+	} 
+	else {
+		pc->setAction("Enemy not found.");
+	}
+}
+
 
 
 // use Potion given direction
@@ -366,6 +418,7 @@ shared_ptr<Player> &Floor::usePotion(int x, int y) {
   }
   return pc;
 }
+
 
 
 
