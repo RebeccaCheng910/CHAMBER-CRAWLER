@@ -22,7 +22,7 @@ using namespace std;
 // constructor 
 Floor::Floor(string filename) {
   ifstream file(filename); // opens the file and read
-  istream *in = new ifstream(filename.c_str()); // read in file
+  ifstream in{filename}; // read in file
   td = make_shared<TextDisplay>(in);
   // initialize vector of chamber pointers
   for (int i = 0; i < totalChamber; ++i) {
@@ -159,18 +159,6 @@ void Floor::readFile(istream &in) {
      }
    }
  }
-  /* check enemy's position
-  cout << "enemy's size is " << enemies.size() << endl;
-  for (int i = 0; i < enemies.size(); ++i) {
-    cout << "position is " << enemies[i]->getInfo().row << " " << enemies[i]->getInfo().col << endl;
-  } 
- */
-  /* check gold's position
-   cout << "gold's size is " << gold.size() << endl;
-   for (int i = 0; i < gold.size(); ++i) {
-     cout << "position is " << gold[i]->getInfo().row << " " << gold[i]->getInfo().col << endl;
-   } 
-  */
 }
  
 
@@ -256,34 +244,34 @@ void Floor::moveEnemy(int x, int y) {
 
   if ((x == 0) && (y == 0)) {}
   else  {
-		int row = pc->getInfo().row;
-		int col = pc->getInfo().col;
-		shared_ptr <Enemy> noMove = find<shared_ptr<Enemy>>(row+x, col+y, enemies);
-		if (noMove) {noMove->setMove(true);} // Enemy will not move if it is in a combat
+	int row = pc->getInfo().row;
+	int col = pc->getInfo().col;
+	shared_ptr <Enemy> noMove = find<shared_ptr<Enemy>>(row+x, col+y, enemies);
+	if (noMove) {noMove->setMove(true);} // Enemy will not move if it is in a combat
   }
   
-	char c = '.';
+  char c = '.';
    for (int i = 0; i < row; ++i) {
      for (int j = 0; j < col; ++j) {
-				 char symbol = td->getTD(i, j);
+		 char symbol = td->getTD(i, j);
          if ((symbol == 'H')||(symbol == 'W')||(symbol == 'E')||(symbol == 'O')||(symbol == 'M')||(symbol == 'L')) {
             shared_ptr <Enemy> e = find<shared_ptr<Enemy>>(i, j, enemies);
-						vector <int> directions;
+		 vector <int> directions;
             // cout << "enemy's current position: " << i << " " << j << endl;
              if (e && e->getMove() != true) {                              
-								if (td->getTD(i,j+1) == c) {
+			if (td->getTD(i,j+1) == c) {
                  directions.emplace_back(0);  // west
                 }
-								if (td->getTD(i,j-1) == c) {
+			if (td->getTD(i,j-1) == c) {
                  directions.emplace_back(1);  // east
                 } 
-								if (td->getTD(i+1,j) == c) {
+			if (td->getTD(i+1,j) == c) {
                  directions.emplace_back(2);  // south
                 }
-								if (td->getTD(i-1,j) == '.') {
+			if (td->getTD(i-1,j) == '.') {
                  directions.emplace_back(3);  // north
                 } 
-								if (td->getTD(i-1,j+1) == c) {
+			if (td->getTD(i-1,j+1) == c) {
                  directions.emplace_back(4);  // ne
                 } 
 								if (td->getTD(i+1,j+1) == c) {
@@ -415,6 +403,7 @@ shared_ptr<Player> &Floor::usePotion(int x, int y) {
   }
   return pc;
 }
+
 
 
 

@@ -19,6 +19,6 @@ public:
   void setBoard();  // generate enemies and items
   void move(std::string);  // move the PC
   bool attack(std::string);
-	bool usePotion(std::string);
+  bool usePotion(std::string);
   void printFloor(); // output the floor
 };
