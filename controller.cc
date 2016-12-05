@@ -107,10 +107,14 @@ void Controller::printFloor() {
 void Controller::move(string direction) {
   tuple<int,int,string> p = convert_direc(direction);
   try {
-  	floor->movePlayer(get<0>(p), get<1>(p), get<2>(p));
+    floor->movePlayer(get<0>(p), get<1>(p), get<2>(p));
   } catch( const int n) {  // pc reaches staircase
     ++floorNum;
-                  //
+    // create a new board
+    floor = make_shared<Floor>(file);
+    floor->setPlayer(pc);   // set floor's PC
+    setBoard();
+    pc->setAction("PC reaches a new floor");
   }
   printFloor();
 }
@@ -138,7 +142,7 @@ bool Controller::attack(string direction) {
 // use potion in direction
 bool Controller::usePotion(string direction)  {
   tuple<int, int, string> p = convert_direc(direction);
-	bool success = true;
+  bool success = true;
   if (get<0>(p) == 0 && get<1>(p) == 0) {
     pc->setAction("Invalid direction");
   } else {

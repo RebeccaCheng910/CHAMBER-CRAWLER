@@ -399,7 +399,7 @@ shared_ptr<Player> &Floor::usePotion(int x, int y) {
     shared_ptr<Potion> p = find<shared_ptr<Potion>>(p_row, p_col, potions);
     pc = make_shared<PotionEffect>(p->getType(),pc);
     td->setTD(p_row, p_col, theGrid[p_row][p_col]->getInfo().type);
-    pc->setAction("PC used a potion(" + p->getName() + ").");
+    pc->setAction("PC used a potion (" + p->getName() + ").");
   }
   return pc;
 }
