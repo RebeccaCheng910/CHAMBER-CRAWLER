@@ -3,18 +3,16 @@
 
 #include "character.h"
 #include <memory>
+#include <string>
 
 class Player;
 
 class Enemy:public Character{
 	bool hasMoved;
 public:
-  Enemy(int, int);
-  int getMove();
-  void setMove(bool);
-  int getHP() override;
-  int getAtk() override;
-  int getDef() override;
+  Enemy(int, int, char);
+  virtual int getMove();
+  virtual void setMove(bool);
   virtual bool beAttackedBy(const std::shared_ptr<Player> &);
 };
 

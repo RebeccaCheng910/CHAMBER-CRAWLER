@@ -10,7 +10,7 @@
 
 using namespace std;
 
-Enemy::Enemy(int row, int col): Character{row, col,'E'} {
+Enemy::Enemy(int row, int col, char type): Character{row, col,type} {
   HP = 140;  //human
   Atk = 20;
   Def = 20;
@@ -19,9 +19,7 @@ Enemy::Enemy(int row, int col): Character{row, col,'E'} {
 
 int Enemy::getMove() {return hasMoved;}
 void Enemy::setMove(bool move) {hasMoved = move;}
-int Enemy::getHP() { return HP;}
-int Enemy::getAtk() {return Atk;}
-int Enemy::getDef() {return Def;}
+
 
 bool Enemy::beAttackedBy(const shared_ptr<Player> &pc) {
 	int atk = pc->getAtk();

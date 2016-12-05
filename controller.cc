@@ -115,12 +115,16 @@ bool Controller::move(string direction) {
   } catch( const int n) {  // pc reaches staircase
     ++floorNum;
 <<<<<<< HEAD
+<<<<<<< HEAD
     // create a new board
     floor = make_shared<Floor>(file);
     floor->setPlayer(pc);   // set floor's PC
     setBoard();
     pc->setAction("PC reaches a new floor");
 =======
+=======
+    floor = make_shared<Floor>(file);
+>>>>>>> refs/remotes/origin/master
     pc = pc->getBase();
     floor->setPlayer(pc);
     setBoard();

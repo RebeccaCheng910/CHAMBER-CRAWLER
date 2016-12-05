@@ -9,6 +9,8 @@
 #include "info.h"
 #include "player.h"
 #include "enemy.h"
+#include "dragon.h"
+#include "human.h"
 #include "character.h"
 #include "gold.h"
 #include "potion.h"
@@ -106,25 +108,25 @@ void Floor::readFile(istream &in) {
       } else if (c == '\\') {  // set stair's position
         stair->setCords(i,j);
       } else  if (c == 'H') {
-        enemies.emplace_back(make_shared<Enemy>(i, j));
+        enemies.emplace_back(make_shared<Human>(i,j,'H'));
         ++enemyCount;
       } else if (c == 'W') {
-        enemies.emplace_back(make_shared<Enemy>(i,j));
+        enemies.emplace_back(make_shared<Enemy>(i,j,c));
         ++enemyCount;
       } else if (c == 'E') {
-        enemies.emplace_back(make_shared<Enemy>(i,j));
+        enemies.emplace_back(make_shared<Enemy>(i,j,c));
         ++enemyCount;
       } else if (c == 'O') {
-        enemies.emplace_back(make_shared<Enemy>(i,j));
+        enemies.emplace_back(make_shared<Enemy>(i,j,c));
         ++enemyCount;
       } else if (c == 'M') {
-        enemies.emplace_back(make_shared<Enemy>(i, j));
+        enemies.emplace_back(make_shared<Enemy>(i,j,c));
         ++enemyCount;
       } else if (c == 'D') {
-        enemies.emplace_back(make_shared<Enemy>(i,j));
+        dragons.emplace_back(make_shared<Dragon>(i,j,c));
         ++enemyCount;
       } else if (c == 'L') {
-        enemies.emplace_back(make_shared<Enemy>(i, j));
+        enemies.emplace_back(make_shared<Enemy>(i,j,c));
         ++enemyCount;
       } else if (c == '0') {  // Restore Health
         potions.emplace_back(make_shared<Potion>(i, j, 0));
@@ -215,11 +217,16 @@ void Floor::generateGold() {
 // generate enemies without specialized type
 void Floor::generateEnemy() {
   int enemyChamber;
-	int enemyType;
+	int t;
   for (int i = 0; i < totalEnemy; ++i) {
     enemyChamber = rand() % totalChamber;
-    enemyType = rand() % 18;
-    enemies.emplace_back(make_shared<Enemy>(0,0));
+    t = rand() % 18;
+		if ((t >= 0) && (t <= 3)) {enemies.emplace_back(make_shared<Human>(0,0,'H'));}
+    else if ((t == 4) || (t == 5) || (t == 6)) {enemies.emplace_back(make_shared<Enemy>(0,0,'W'));} 
+    else if ((t >= 7) && (t <= 11)) {enemies.emplace_back(make_shared<Enemy>(0,0,'L'));}
+    else if ((t == 12) || (t == 13)) {enemies.emplace_back(make_shared<Enemy>(0,0,'E'));}
+		else if ((t == 14) || (t == 15)) {enemies.emplace_back(make_shared<Enemy>(0,0,'O'));}
+		else if ((t == 16) || (t == 17)) {enemies.emplace_back(make_shared<Enemy>(0,0,'M'));}
     theChambers[enemyChamber]->generatePosition(enemies[i].get());
     td->setTD(enemies[i]->getInfo().row, enemies[i]->getInfo().col, enemies[i]->getInfo().type);
    }
@@ -230,7 +237,7 @@ void Floor::generateDragon(int x, int y) {
   for (int i = x-1; i <= x+1; ++i) {
 		for (int j = y-1; j <= y+1; ++j) {
 			if (td->getTD(i, j) == '.') {
-				dragons.emplace_back(make_shared<Enemy>(i,j));
+				dragons.emplace_back(make_shared<Dragon>(i,j,'D'));
 				td->setTD(i, j, 'D');
         return;
 			}
@@ -420,6 +427,21 @@ void Floor::attack(int x, int y) {
     
 		if (dead) {
 			pc->setAction(pc->getAction() + e->getInfo().type + " is slained.");
+    
+    // if slained Enemy is Human, drops 2 normal piles of Gold  
+		if (e->getInfo().type == 'H') {
+        int count = 0;
+        while (count < 2 ) {
+					int generate_x = rand()% 25;
+          int generate_y = rand()% 79;
+          if (td->getTD(generate_x, generate_y) == '.') {
+          	count++;
+						golds.emplace_back(make_shared<Gold>(generate_x,generate_y,0));  // normal pile
+					  td->setTD(generate_x,generate_y,'G');
+			    }
+				}
+			}
+      // remove slained Enemy
 			td->setTD(e->getInfo().row, e->getInfo().col, '.'); 
 			e = nullptr;
 		} else {
