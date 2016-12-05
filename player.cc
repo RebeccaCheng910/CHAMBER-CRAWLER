@@ -41,7 +41,7 @@ void Player::beAttackedBy(const shared_ptr<Enemy> &e) {
 
   if ((symbol == 'O') && (race == "Goblins")) {damage *= 1.5;}
   if ((symbol == 'E') && (race != "Drow")) {second = true;}
-  // attack 
+	// attack 
   stringstream s;
   if (attack1 == 0) {
 		HP -= damage;

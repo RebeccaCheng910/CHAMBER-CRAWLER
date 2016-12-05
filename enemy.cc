@@ -29,20 +29,31 @@ bool Enemy::beAttackedBy(const shared_ptr<Player> &pc) {
 	d = d * atk;
   double damage = ceil(d);
   stringstream s;
-	int chance = rand() % 2;
+	int chance = rand() % 2;  // 0 means missed; 1 means successful attack 
+
 	if ((getInfo().type == 'L') && (chance == 0)) {    // when halfling causes pc to miss the attack 
 		s << "PC missed " << getInfo().type << " (" << HP << " HP). ";
 	} else if ((getInfo().type == 'W') && (pc->getRace() == "Vampire") && (chance == 1)) {	
-		pc->setHP(pc->getHP()-10); // setHP(5 - 10) equals to setHP(-5)
+		pc->setHP(pc->getHP()-5);
+	} else if ((pc->getRace() == "Vampire") && (chance == 1)) {
+		pc->setHP(pc->getHP() + 5);
+  } else if (pc->getRace() == "Troll") {
+		pc->setHP(pc->getHP() + 5);
 	} else {
 		HP -= damage;
-    if (HP <= 0) {HP = 0;}  
+    if (HP <= 0) {
+			if (pc->getRace() == "Goblin") {
+				pc->setGold(pc->getGold() + 5);
+				s << pc->getRace() << " stole 5 gold from slained " << getInfo().type << ". ";
+			}
+			HP = 0;}  
 	}
 	s << "PC deals " << damage << " damage to " << getInfo().type << " (" << HP << " HP). "; 
   pc->setAction(s.str());
   
-	if (HP == 0) { 
+	if (HP == 0) {
     return true;
 	} 
 		return false;
 }
+

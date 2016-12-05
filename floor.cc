@@ -275,6 +275,8 @@ template<typename T> T Floor::find(int row, int col, vector<T> v) {
     return nullptr;
 }
 				
+// controls movement of enemies 
+
  
 // move all enemies starts from leftmost and upmost
 void Floor::moveEnemy(int x, int y) {
@@ -381,7 +383,7 @@ void Floor::dragonsAttack(int x, int y) {
 
 
 // move pc according to command of game players (no, so, ea, we,ne, nw, se, sw) 
-void Floor::movePlayer(int new_x, int new_y, string dir) {
+void Floor::movePlayer(bool move, int new_x, int new_y, string dir) {
 	int x = pc->getInfo().row;
   int y = pc->getInfo().col;
   char c = td->getTD(x + new_x, y + new_y);
@@ -414,7 +416,8 @@ void Floor::movePlayer(int new_x, int new_y, string dir) {
     pc->setCords(x + new_x, y + new_y);
 		actionStr += "PC moves " + dir;
 		pc->setAction(actionStr);
-		moveEnemy(0,0);
+		if (move) moveEnemy(0,0);
+
 		for (int i = x+new_x-1; i <= x+new_x+1; ++i) {
 			for (int j = y+new_y-1; j <= y+new_y+1; ++j) {
 			  if (td->getTD(i,j) == 'G') {

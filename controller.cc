@@ -3,6 +3,7 @@
 #include <iostream>
 #include "floor.h"
 #include <fstream>
+#include <sstream>
 #include <memory>
 #include "character.h"
 #include "shade.h"
@@ -112,16 +113,19 @@ void Controller::printFloor() {
   cout << "Action: " << pc->getAction() << endl;
 }
 
-bool Controller::move(string direction) {
+bool Controller::move(bool move, string direction) {
   tuple<int,int,string> p = convert_direc(direction);
   try {
-    floor->movePlayer(get<0>(p), get<1>(p), get<2>(p));
+    floor->movePlayer(move, get<0>(p), get<1>(p), get<2>(p));
   } catch( const int n) {  // pc reaches staircase
     ++floorNum;
-    // Player leaves 5th floor. 
+    // Player won
     if (floorNum > 5) {
-			floorNum = 5;
-			pc->setAction("PC has won. Contratulations!");
+			floorNum = 5; 
+      stringstream s;
+      s << "PC has won with a score of ";
+      int score = getScore();
+      s << score << ". Congratulations! ";
       printFloor();
 			return false;
 		}
@@ -175,3 +179,16 @@ bool Controller::usePotion(string direction)  {
   printFloor();
   return success;
 }
+
+// get player's score and return to main 
+int Controller::getScore() {
+	int score;
+	if (pc->getRace() == "Shade") {
+		score = pc->getGold() * 1.5;
+	} else {score = pc->getGold();}
+	return score;
+}
+
+
+
+
