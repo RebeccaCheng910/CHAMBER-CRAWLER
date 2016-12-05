@@ -32,15 +32,16 @@ bool Enemy::beAttackedBy(const shared_ptr<Player> &pc) {
 	int chance = rand() % 2;
 	if ((getInfo().type == 'L') && (chance == 0)) {    // when halfling causes pc to miss the attack 
 		s << "PC missed " << getInfo().type << " (" << HP << " HP). ";
+	} else if ((getInfo().type == 'W') && (pc->getRace() == "Vampire") && (chance == 1)) {	
+		pc->setHP(-10); // setHP(5 - 10) equals to setHP(-5)
 	} else {
 		HP -= damage;
-    if (HP <= 0) {HP = 0;}
-		s << "PC deals " << damage << " damage to " << getInfo().type << " (" << HP << " HP). ";
-  }
-  
+    if (HP <= 0) {HP = 0;}  
+	}
+	s << "PC deals " << damage << " damage to " << getInfo().type << " (" << HP << " HP). "; 
   pc->setAction(s.str());
   
-	if (HP == 0) {
+	if (HP == 0) { 
     return true;
 	} 
 		return false;

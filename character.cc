@@ -15,6 +15,10 @@ int Character::getHP(){
   return HP;
 }
 
+void Character::setHP(int n){
+	HP += n;
+}
+
 int Character::getAtk(){
   return Atk;
 }

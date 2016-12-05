@@ -11,9 +11,10 @@ protected:
 public:
   Character(int, int, char);
   virtual int getHP();    // get character's HP
-  virtual int getAtk();   // get character's Atk
+  virtual void setHP(int);   // set character's HP
+	virtual int getAtk();   // get character's Atk
   virtual int getDef();  // get character's Def
-  std::string getRace();     // get character's racee
+  virtual std::string getRace();     // get character's racee
   virtual ~Character() = 0;   
 };
 

@@ -11,6 +11,7 @@ public:
 	~Gold();
 	int getValue();
 	bool getGold();
+  void setGold(bool gettable);
 };
 
 #endif

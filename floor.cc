@@ -1,6 +1,7 @@
 #include "floor.h"
 #include "textdisplay.h"
 #include <iostream>
+#include <sstream>
 #include "object.h"
 #include "chamber.h"
 #include <memory>
@@ -11,6 +12,11 @@
 #include "enemy.h"
 #include "dragon.h"
 #include "human.h"
+#include "dwarf.h"
+#include "elf.h"
+#include "orcs.h"
+#include "halfling.h"
+#include "merchant.h"
 #include "character.h"
 #include "gold.h"
 #include "potion.h"
@@ -111,22 +117,21 @@ void Floor::readFile(istream &in) {
         enemies.emplace_back(make_shared<Human>(i,j,'H'));
         ++enemyCount;
       } else if (c == 'W') {
-        enemies.emplace_back(make_shared<Enemy>(i,j,c));
+        enemies.emplace_back(make_shared<Dwarf>(i,j,'W'));
         ++enemyCount;
       } else if (c == 'E') {
-        enemies.emplace_back(make_shared<Enemy>(i,j,c));
+        enemies.emplace_back(make_shared<Elf>(i,j,'E'));
         ++enemyCount;
       } else if (c == 'O') {
-        enemies.emplace_back(make_shared<Enemy>(i,j,c));
+        enemies.emplace_back(make_shared<Orcs>(i,j,'O'));
         ++enemyCount;
       } else if (c == 'M') {
-        enemies.emplace_back(make_shared<Enemy>(i,j,c));
+        enemies.emplace_back(make_shared<Merchant>(i,j,'M'));
         ++enemyCount;
-      } else if (c == 'D') {
-        dragons.emplace_back(make_shared<Dragon>(i,j,c));
-        ++enemyCount;
+      } else if (c == 'D') { 
+        dragons.emplace_back(make_shared<Dragon>(i,j,'D'));
       } else if (c == 'L') {
-        enemies.emplace_back(make_shared<Enemy>(i,j,c));
+        enemies.emplace_back(make_shared<Halfling>(i,j,'L'));
         ++enemyCount;
       } else if (c == '0') {  // Restore Health
         potions.emplace_back(make_shared<Potion>(i, j, 0));
@@ -222,11 +227,11 @@ void Floor::generateEnemy() {
     enemyChamber = rand() % totalChamber;
     t = rand() % 18;
 		if ((t >= 0) && (t <= 3)) {enemies.emplace_back(make_shared<Human>(0,0,'H'));}
-    else if ((t == 4) || (t == 5) || (t == 6)) {enemies.emplace_back(make_shared<Enemy>(0,0,'W'));} 
-    else if ((t >= 7) && (t <= 11)) {enemies.emplace_back(make_shared<Enemy>(0,0,'L'));}
-    else if ((t == 12) || (t == 13)) {enemies.emplace_back(make_shared<Enemy>(0,0,'E'));}
-		else if ((t == 14) || (t == 15)) {enemies.emplace_back(make_shared<Enemy>(0,0,'O'));}
-		else if ((t == 16) || (t == 17)) {enemies.emplace_back(make_shared<Enemy>(0,0,'M'));}
+    else if ((t == 4) || (t == 5) || (t == 6)) {enemies.emplace_back(make_shared<Dwarf>(0,0,'W'));} 
+    else if ((t >= 7) && (t <= 11)) {enemies.emplace_back(make_shared<Halfling>(0,0,'L'));}
+    else if ((t == 12) || (t == 13)) {enemies.emplace_back(make_shared<Elf>(0,0,'E'));}
+		else if ((t == 14) || (t == 15)) {enemies.emplace_back(make_shared<Orcs>(0,0,'O'));}
+		else if ((t == 16) || (t == 17)) {enemies.emplace_back(make_shared<Merchant>(0,0,'M'));}
     theChambers[enemyChamber]->generatePosition(enemies[i].get());
     td->setTD(enemies[i]->getInfo().row, enemies[i]->getInfo().col, enemies[i]->getInfo().type);
    }
@@ -238,6 +243,9 @@ void Floor::generateDragon(int x, int y) {
 		for (int j = y-1; j <= y+1; ++j) {
 			if (td->getTD(i, j) == '.') {
 				dragons.emplace_back(make_shared<Dragon>(i,j,'D'));
+				shared_ptr <Gold> g = find<shared_ptr<Gold>>(x, y, golds);
+				shared_ptr <Dragon> d = find<shared_ptr<Dragon>>(i, j, dragons);
+				if (g) d->setHoard(g);
 				td->setTD(i, j, 'D');
         return;
 			}
@@ -326,18 +334,40 @@ void Floor::moveEnemy(int x, int y) {
  }
 }
 
+
 // check player in range for attack 
 template<typename T> void Floor::enemiesAttack(int x, int y, vector<T> v) {
 	for (int i = x-1;i <= x+1; ++i) {
 		for (int j = y-1; j <= y+1; ++j) {
 			shared_ptr <Enemy> e = find<shared_ptr<Enemy>>(i, j, v);
 			if (e) {
+				// Merchant
+				if (e->getInfo().type == 'M') {
+          shared_ptr <Merchant> m = dynamic_pointer_cast<Merchant>(e);
+					if (m->getHostility() == true) {
+						pc->beAttackedBy(e);
+				  	return;
+					}
+				} else {
 				pc->beAttackedBy(e);
         return;
+				}
 		  }
 		} 
 	}
 } 
+
+void Floor::dragonsAttack(int x, int y) {
+		for (int i = x-1;i <= x+1; ++i) {
+			for (int j = y-1; j <= y+1; ++j) {
+				shared_ptr <Dragon> d = find<shared_ptr<Dragon>>(i, j, dragons);
+				if (d) {
+					pc->beAttackedBy(d);
+					return;
+				}
+			}
+		}
+}
 
 
 // move pc according to command of game players (no, so, ea, we,ne, nw, se, sw) 
@@ -366,7 +396,7 @@ void Floor::movePlayer(int new_x, int new_y, string dir) {
         g = nullptr;
         actionStr = "A " + name + " is picked up. ";
 			}
-			else {enemiesAttack(x, y, dragons);}
+			else {dragonsAttack(x, y);}
     }
     td->setTD(x + new_x, y + new_y, '@');
 		char original = theGrid[x][y]->getInfo().type;
@@ -381,24 +411,23 @@ void Floor::movePlayer(int new_x, int new_y, string dir) {
 				  shared_ptr <Gold> g = find<shared_ptr<Gold>>(i, j, golds);
 				  if (g->getGold() == true) {      // if PC is within 1 radius of dragon hoard
 				  pc->setAction(pc->getAction() + " and attacked by a nearby Dragon. ");
-					enemiesAttack(i, j, dragons);
+					dragonsAttack(i, j);
           return;
 				  }
 			  } else if (td->getTD(i,j) == 'D') {       // if PC is within 1 radius of dragon 
 					pc->setAction(pc->getAction() + ". ");
-					enemiesAttack(i, j, dragons); 
+					dragonsAttack(i, j); 
 					return;
         }
 				if (td->getTD(i,j) == 'P') {
-          pc->setAction(pc->getAction() + " and sees an unknown portion");
-          break; 
+          pc->setAction(pc->getAction() + " and sees an unknown portion.");
+          enemiesAttack(x + new_x, y + new_y, enemies);
+					return;
 				}
 		  } 
 		}
-		
 		pc->setAction(pc->getAction() + ". ");
     enemiesAttack(x + new_x, y + new_y, enemies);
-    
 	} else pc->setAction("Invalid direction, PC's way is blocked.");
 }
 
@@ -411,49 +440,73 @@ void Floor::moveObject(int old_x, int old_y, int new_x, int new_y, char symbol, 
         e->setMove(true);
 }
 
-
 // attack Enemy given direction 
 void Floor::attack(int x, int y) {
-	int row = pc->getInfo().row;
-  int col = pc->getInfo().col;
-  shared_ptr <Enemy> e;
-  if (td->getTD(row+x, col+y) == 'G') {
-		e = find<shared_ptr<Enemy>>(row+x, col+y,dragons);
-  } else { 
-	  e = find<shared_ptr<Enemy>>(row+x, col+y, enemies);
-	}
-	if (e) { 
-		bool dead = e->beAttackedBy(pc);
-    
-		if (dead) {
-			pc->setAction(pc->getAction() + e->getInfo().type + " is slained.");
-    
-    // if slained Enemy is Human, drops 2 normal piles of Gold  
-		if (e->getInfo().type == 'H') {
-        int count = 0;
-        while (count < 2 ) {
-					int generate_x = rand()% 25;
-          int generate_y = rand()% 79;
-          if (td->getTD(generate_x, generate_y) == '.') {
-          	count++;
-						golds.emplace_back(make_shared<Gold>(generate_x,generate_y,0));  // normal pile
-					  td->setTD(generate_x,generate_y,'G');
-			    }
+   int row = pc->getInfo().row;
+   int col = pc->getInfo().col;
+   int type = td->getTD(row+x, col+y);
+   if ((type == 'W') || (type == 'O') || (type == 'L') || (type == 'M') || (type == 'H')) {
+     shared_ptr <Enemy> e = find<shared_ptr<Enemy>>(row+x, col+y,enemies);
+     if (e) {
+     	bool dead = e->beAttackedBy(pc);
+     	char symbol = e->getInfo().type;
+        // attack Merchant, all Merchant becomes hostile
+        if (symbol == 'M') {
+        shared_ptr <Merchant> m = dynamic_pointer_cast<Merchant>(e);
+        m->setHostility(true);
+        pc->setAction(pc->getAction() + "Merchants are now hostile. ");
+        }
+        if (dead) { 
+        	pc->setAction(pc->getAction() + symbol + " is slained.");
+         	td->setTD(row+x, col+y, '.');
+         	// if slained Enemy is Human, drops 2 normal piles of Gold  
+          if (symbol == 'H') {
+         	int count = 0;
+         	while (count < 2 ) {
+           		int generate_x = rand()% 25;
+           		int generate_y = rand()% 79;
+           		if (td->getTD(generate_x, generate_y) == '.') {
+             		count++;
+             		golds.emplace_back(make_shared<Gold>(generate_x,generate_y,0));  // 2 normal pile generated
+             		td->setTD(generate_x,generate_y,'G');
+           		}
+         	    pc->setAction(pc->getAction() + " Two piles of normal gold generated.");
+         	}
+       	   } // if slained Enemy is Merchant, drops a merchant hoard
+     		else if (symbol == 'M') {
+       			golds.emplace_back(make_shared<Gold>(row+x,col+y,10));   // 1 merchant hoard generated
+       			td->setTD(row+x,col+y,'G');
+     		} // if slained Enemy is not Human, Dragon or Merchant, pickes up 1 normal or small pile of Gold
+              else {
+        		int add = rand() % 2;
+            	pc->setGold(add + 1);   // small(1) or normal(2) pile 
+         		stringstream s;
+         		s << " Gold value increase " << (add+1) << ".";                                                                                          
+         		pc->setAction(pc->getAction() + s.str());
+     		   }
+     		   e = nullptr;
+     	    } else {
+						moveEnemy(x,y);
+						enemiesAttack(row+x, col+y, enemies);
+     	    } 
+			  }
+			} else if (type == 'D') { 
+     		shared_ptr<Dragon> g = find<shared_ptr<Dragon>>(row+x, col+y, dragons); 
+     		if (g) {
+     			bool dead = g->beAttackedBy(pc);
+     			if (dead) {
+						pc->setAction(pc->getAction() + g->getInfo().type + " is slained.");
+     			 //  g->getHoard()->setGold(false);
+						td->setTD(row+x, col+y, '.');
+     		  } else {
+					 	 moveEnemy(0,0);
+						 dragonsAttack(row+x, col+y);
 				}
 			}
-      // remove slained Enemy
-			td->setTD(e->getInfo().row, e->getInfo().col, '.'); 
-			e = nullptr;
-		} else {
-      moveEnemy(x, y);
-			pc->beAttackedBy(e);
-		}
-	} 
-	else {
-		pc->setAction("Enemy not found.");
-	}
+    } else {
+     pc->setAction("Enemy not found.");
+   }
 }
-
 
 
 // use Potion given direction
@@ -477,11 +530,8 @@ shared_ptr<Player> &Floor::usePotion(int x, int y) {
 
 
 
-
-
 // output floor
 ostream &operator<< (ostream &out, const Floor &f) {
   out << *f.td;
   return out;
 }
-

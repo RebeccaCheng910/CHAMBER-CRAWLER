@@ -10,13 +10,13 @@ Gold::Gold (int row, int col, int n): Object{row, col, 'G'} {
   if ( n >= 0 && n < 5) {  // normal pile
     value = 2;
     isProtected = false;
-  } else if (n == 5) { // gragon hord
+  } else if (n == 5) { //dragon hord
     value = 6;
     isProtected = true;
   } else if ( n == 6 || n == 7) { //small hoard
     value = 1;
     isProtected = false;
-  } else if ( n == 10) {  //
+  } else if (n == 10) {  //merchant hoard
      value = 4;
      isProtected = false;
   }
@@ -30,4 +30,4 @@ int Gold::getValue() {return value;}
 
 bool Gold::getGold() {return isProtected;}
 
-
+void Gold::setGold(bool gettable) {isProtected = gettable;}

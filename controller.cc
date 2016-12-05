@@ -120,7 +120,7 @@ bool Controller::move(string direction) {
     setBoard();
     pc->setAction("PC reaches a new floor.");
   }
-  if (pc->getStatus()) {pc->setAction("PC is defeated by Dragon.");}
+  if (pc->getStatus()) {pc->setAction(pc->getAction() + "PC is defeated by Enemy.");}
   printFloor();
   return (!pc->getStatus());
 }
@@ -133,7 +133,7 @@ bool Controller::attack(string direction) {
     }  else {
 		floor->attack(get<0>(p), get<1>(p));
     if (pc->getStatus()) {
-			pc->setAction("PC is defeated by Enemy.");
+			pc->setAction(pc->getAction() + "PC is defeated by Enemy.");
 		}
 	}
 	printFloor();
