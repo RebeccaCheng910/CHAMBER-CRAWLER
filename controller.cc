@@ -7,6 +7,7 @@
 #include "character.h"
 #include "shade.h"
 #include <tuple>
+#include "drow.h"
 
 using namespace std;
 
@@ -69,7 +70,7 @@ Controller::~Controller() {
 // set a PC with no specialized type
 void Controller::setRace(char c) {
   if (c == 'd') {
-    pc = make_shared<Shade>(); //
+    pc = make_shared<Drow>(); //
   } else if ( c == 'v') {
     pc = make_shared<Shade>();  //
   } else if (c == 't') {
@@ -114,22 +115,17 @@ bool Controller::move(string direction) {
     floor->movePlayer(get<0>(p), get<1>(p), get<2>(p));
   } catch( const int n) {  // pc reaches staircase
     ++floorNum;
-<<<<<<< HEAD
-<<<<<<< HEAD
     // create a new board
     floor = make_shared<Floor>(file);
     floor->setPlayer(pc);   // set floor's PC
     setBoard();
-    pc->setAction("PC reaches a new floor");
-=======
-=======
     floor = make_shared<Floor>(file);
->>>>>>> refs/remotes/origin/master
+    int temp_HP = pc->getHP();
     pc = pc->getBase();
+    pc->setHP(temp_HP);
     floor->setPlayer(pc);
     setBoard();
     pc->setAction("PC reaches a new floor.");
->>>>>>> 1fded3cdfccedd9855f97ce07fe6db2477a3bf83
   }
   if (pc->getStatus()) {pc->setAction("PC is defeated by Dragon.");}
   printFloor();

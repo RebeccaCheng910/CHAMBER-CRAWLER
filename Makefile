@@ -1,7 +1,7 @@
 CXX = g++-5
 CXXFLAGS = -std=c++14 -Wall -MMD
 EXEC = cc3k
-OBJECTS = main.o controller.o textdisplay.o floor.o object.o chamber.o character.o player.o enemy.o gold.o potion.o shade.o dragon.o human.o decorator.o potioneffect.o
+OBJECTS = main.o controller.o textdisplay.o floor.o object.o chamber.o character.o player.o enemy.o gold.o potion.o shade.o dragon.o human.o drow.o decorator.o potioneffect.o RH.o BA.o BD.o PH.o WA.o WD.o
 DEPENDS = ${OBJECTS:.o=.d}
 
 ${EXEC}: ${OBJECTS}

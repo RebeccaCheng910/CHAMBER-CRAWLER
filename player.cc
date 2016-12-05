@@ -11,6 +11,7 @@ using namespace std;
 
 // constructor
 Player::Player(): Character(0, 0, '@'),action{"Player character has spawned."} { 
+  goldValue = 0;
  // need to explicitly sets player's position
 }
 
@@ -20,6 +21,8 @@ void Player::setAction(string s) {action = s;}
 int Player::getGold() {return goldValue;}
 void Player::setGold(int values) {goldValue += values;}
 bool Player::getStatus() {return isDead;}
+
+void Player::setHP(int n) {HP = n;}
 
 void Player::beAttackedBy(const shared_ptr<Enemy> &e) {
 	int atk = e->getAtk();

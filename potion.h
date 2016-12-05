@@ -5,12 +5,14 @@
 
 class Potion: public Object {
 	int type;
+protected:
 	std::string name;
 public:
 	Potion(int, int, int);
-        ~Potion();	
+        virtual ~Potion() = 0;	
 	int getType();
 	std::string getName();
+	static bool isKnown();  //
 };
 
 #endif

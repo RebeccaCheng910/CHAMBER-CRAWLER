@@ -17,6 +17,12 @@
 #include <cstdlib>
 #include <stdexcept>
 #include "potioneffect.h"
+#include "RH.h"
+#include "BA.h"
+#include "BD.h"
+#include "PH.h"
+#include "WA.h"
+#include "WD.h"
 
 using namespace std;
 
@@ -129,22 +135,22 @@ void Floor::readFile(istream &in) {
         enemies.emplace_back(make_shared<Enemy>(i,j,c));
         ++enemyCount;
       } else if (c == '0') {  // Restore Health
-        potions.emplace_back(make_shared<Potion>(i, j, 0));
+        potions.emplace_back(make_shared<RH>(i, j));
 	++potionCount;
       } else if (c == '1') {  // Boost Attack 
-	potions.emplace_back(make_shared<Potion>(i, j, 1));
+	potions.emplace_back(make_shared<BA>(i, j));
 	++potionCount;
       } else if (c == '2') {  // Boost Defence
-	potions.emplace_back(make_shared<Potion>(i, j, 2));
+	potions.emplace_back(make_shared<BD>(i, j));
 	++potionCount;
       } else if (c == '3') {  // Poison Health
-	potions.emplace_back(make_shared<Potion>(i, j, 3));
+	potions.emplace_back(make_shared<PH>(i, j));
 	++potionCount;
       } else if (c == '4') {   // Wound Attack
-	potions.emplace_back(make_shared<Potion>(i, j,  4));
+	potions.emplace_back(make_shared<WA>(i, j));
 	++potionCount;
       } else if (c == '5') {   // Wound Defence
- 	potions.emplace_back(make_shared<Potion>(i, j,  5));
+ 	potions.emplace_back(make_shared<WD>(i, j));
 	++potionCount;
       } else if (c == '6') {  // nomal gold pile
 	golds.emplace_back(make_shared<Gold>(i, j, 0));
@@ -192,8 +198,12 @@ void Floor::generatePotion() {
   for (int i = 0; i < totalItem; ++i) {
     potionChamber = rand() % totalChamber;
     potionType = rand() % 6;
-   // cout << "type is " << potionType << endl;     //DeBUG
-    potions.emplace_back(make_shared<Potion>(0,0,potionType));
+    if (potionType == 0) {potions.emplace_back(make_shared<RH>(0,0));}
+    else if (potionType == 1) {potions.emplace_back(make_shared<BA>(0,0));}
+    else if (potionType == 2) {potions.emplace_back(make_shared<BD>(0,0));}
+    else if (potionType == 3) {potions.emplace_back(make_shared<PH>(0,0));}
+    else if (potionType == 4) {potions.emplace_back(make_shared<WA>(0,0));}
+    else if (potionType == 5) {potions.emplace_back(make_shared<WD>(0,0));}
     theChambers[potionChamber]->generatePosition(potions[i].get());
     td->setTD(potions[i]->getInfo().row, potions[i]->getInfo().col, potions[i]->getInfo().type);
   }
