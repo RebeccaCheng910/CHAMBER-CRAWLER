@@ -508,8 +508,8 @@ void Floor::attack(int x, int y) {
              		golds.emplace_back(make_shared<Gold>(generate_x,generate_y,0));  // 2 normal pile generated
              		td->setTD(generate_x,generate_y,'G');
            		}
-         	    pc->setAction(pc->getAction() + " Two piles of normal gold generated.");
          	}
+					 pc->setAction(pc->getAction() + " Two piles of normal gold generated.");
        	   } // if slained Enemy is Merchant, drops a merchant hoard
      		else if (symbol == 'M') {
        			golds.emplace_back(make_shared<Gold>(row+x,col+y,10));   // 1 merchant hoard generated
