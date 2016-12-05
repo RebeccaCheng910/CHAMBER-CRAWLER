@@ -430,11 +430,6 @@ void Floor::movePlayer(int new_x, int new_y, string dir) {
 					return;
         }
 				if (td->getTD(i,j) == 'P') {
-<<<<<<< HEAD
-          pc->setAction(pc->getAction() + " and sees an unknown portion.");
-          enemiesAttack(x + new_x, y + new_y, enemies);
-					return;
-=======
           // check if pc has used this type of potion
           shared_ptr<Potion> p = find(i, j, potions);
           bool known;
@@ -466,7 +461,6 @@ void Floor::movePlayer(int new_x, int new_y, string dir) {
                 }
 
           break; 
->>>>>>> 2ab9a271f7b63457fc62f4a2ac24cfb3de06a6a9
 				}
 		  } 
 		}
