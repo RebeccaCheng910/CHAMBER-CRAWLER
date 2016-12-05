@@ -12,7 +12,6 @@ public:
         virtual ~Potion() = 0;	
 	int getType();
 	std::string getName();
-	static bool isKnown();  //
 };
 
 #endif

@@ -4,7 +4,10 @@
 #include "potion.h"
 
 class BA: public Potion{
+  static bool knownType;
 public:
   BA(int row, int col);
+  static bool isKnown();
+  static void setKnown();
 };
 #endif

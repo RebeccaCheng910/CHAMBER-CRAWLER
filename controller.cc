@@ -8,6 +8,9 @@
 #include "shade.h"
 #include <tuple>
 #include "drow.h"
+#include "vampire.h"
+#include "troll.h"
+#include "goblin.h"
 
 using namespace std;
 
@@ -72,11 +75,11 @@ void Controller::setRace(char c) {
   if (c == 'd') {
     pc = make_shared<Drow>(); //
   } else if ( c == 'v') {
-    pc = make_shared<Shade>();  //
+    pc = make_shared<Vampire>();  //
   } else if (c == 't') {
-    pc = make_shared<Shade>();
+    pc = make_shared<Troll>();
   } else if (c == 'g') {
-    pc = make_shared<Shade>();
+    pc = make_shared<Goblin>();
   } else {        // use Shade as default
     pc = make_shared<Shade>();
   }

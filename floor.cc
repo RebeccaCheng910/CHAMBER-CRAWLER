@@ -400,7 +400,36 @@ void Floor::movePlayer(int new_x, int new_y, string dir) {
 					return;
         }
 				if (td->getTD(i,j) == 'P') {
-          pc->setAction(pc->getAction() + " and sees an unknown portion");
+          // check if pc has used this type of potion
+          shared_ptr<Potion> p = find(i, j, potions);
+          bool known;
+   	  string p_type;
+          if (shared_ptr<RH> temp = dynamic_pointer_cast<RH>(p)) {
+                known = temp->isKnown();
+               // temp->setKnown();
+    		p_type = temp->getName();
+         } else if (shared_ptr<BA> temp = dynamic_pointer_cast<BA>(p)){
+                known = temp->isKnown();
+		p_type = temp->getName();
+         } else if (shared_ptr<BD> temp = dynamic_pointer_cast<BD>(p)){
+		known = temp->isKnown();
+		p_type = temp->getName();
+	} else if (shared_ptr<PH> temp = dynamic_pointer_cast<PH>(p)){
+		known = temp->isKnown();
+		p_type = temp->getName();
+ 	}else if (shared_ptr<WA> temp = dynamic_pointer_cast<WA>(p)){
+		known = temp->isKnown();
+		p_type = temp->getName();
+	} else if (shared_ptr<WD> temp = dynamic_pointer_cast<WD>(p)){
+		known = temp->isKnown();
+		p_type = temp->getName();
+	}
+         if (known != true) {
+         	 pc->setAction(pc->getAction() + " and sees an unknown potion");
+                } else {
+		pc->setAction(pc->getAction() + " and sees a potion(" + p_type + "). u <direction> to use the potion.");
+                }
+
           break; 
 				}
 		  } 
@@ -481,7 +510,20 @@ shared_ptr<Player> &Floor::usePotion(int x, int y) {
     pc = make_shared<PotionEffect>(p->getType(),pc);
     td->setTD(p_row, p_col, theGrid[p_row][p_col]->getInfo().type);
     pc->setAction("PC used a potion (" + p->getName() + ").");
+    if (shared_ptr<RH> temp = dynamic_pointer_cast<RH>(p)){
+	 temp->setKnown();
+    } else if (shared_ptr<BA> temp = dynamic_pointer_cast<BA>(p)) {
+         temp->setKnown();
+    } else if (shared_ptr<BD> temp = dynamic_pointer_cast<BD>(p)) {
+     	temp->setKnown();
+    } else if (shared_ptr<PH> temp = dynamic_pointer_cast<PH>(p)) {
+  	 temp->setKnown();
+   } else if (shared_ptr<WA> temp = dynamic_pointer_cast<WA>(p)) {
+     temp->setKnown();
+   } else if (shared_ptr<WD> temp = dynamic_pointer_cast<WD>(p)) {
+     temp->setKnown();
   }
+ }
   return pc;
 }
 

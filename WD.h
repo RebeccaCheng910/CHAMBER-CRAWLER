@@ -4,8 +4,11 @@
 #include "potion.h"
 
 class WD: public Potion{
+  static bool knownType;
 public:
   WD(int row, int col);
+  static bool isKnown();
+  static void setKnown();
 };
 #endif
 
