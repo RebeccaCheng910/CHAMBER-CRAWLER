@@ -50,6 +50,10 @@ void Controller::startGame() {
   for (int i = 0; i < 10; ++i) {
     cout << endl;
   }
+  cout << "Welcome to CC3K." << endl;
+  for (int i = 0; i < 5; ++i) {
+    cout << endl;
+	}
   cout << "Please choose a race" << endl;
   cout << "s - Shade" << endl;
   cout << "d - Drow" << endl;
@@ -104,51 +108,43 @@ void Controller::printFloor() {
   cout << "Action: " << pc->getAction() << endl;
 }
 
-void Controller::move(string direction) {
+bool Controller::move(string direction) {
   tuple<int,int,string> p = convert_direc(direction);
   try {
     floor->movePlayer(get<0>(p), get<1>(p), get<2>(p));
   } catch( const int n) {  // pc reaches staircase
     ++floorNum;
+<<<<<<< HEAD
     // create a new board
     floor = make_shared<Floor>(file);
     floor->setPlayer(pc);   // set floor's PC
     setBoard();
     pc->setAction("PC reaches a new floor");
+=======
+    pc = pc->getBase();
+    floor->setPlayer(pc);
+    setBoard();
+    pc->setAction("PC reaches a new floor.");
+>>>>>>> 1fded3cdfccedd9855f97ce07fe6db2477a3bf83
   }
+  if (pc->getStatus()) {pc->setAction("PC is defeated by Dragon.");}
   printFloor();
+  return (!pc->getStatus());
 }
 
-// attack enemy in gievn direction 
+// attack enemy in given direction 
 bool Controller::attack(string direction) {
   tuple<int, int, string> p = convert_direc(direction);
-  bool success = true;
     if (get<0>(p) == 0 && get<1>(p) == 0) {
       pc->setAction("Invalid direction");
     }  else {
-	floor->attack(get<0>(p), get<1>(p));
-        if (!pc->getStatus()) {
-    	  floor->moveEnemy(get<0>(p), get<1>(p));
-	} else {
-<<<<<<< HEAD
 		floor->attack(get<0>(p), get<1>(p));
-    if (!pc->getStatus()) {
-    	floor->moveEnemy(get<0>(p), get<1>(p));
-		} else {
+    if (pc->getStatus()) {
 			pc->setAction("PC is defeated by Enemy.");
-			success = false;
 		}
 	}
 	printFloor();
-  return success;
-=======
-       	  pc->setAction("You are Dead.");
-	  success = false;
-        }
-      }
-      printFloor();
-      return success;
->>>>>>> 3aa7e9247108528668644c03c5a7ad39a2efa5f5
+  return (!pc->getStatus());
 }
 
 
@@ -161,18 +157,10 @@ bool Controller::usePotion(string direction)  {
   } else {
     pc = floor->usePotion(get<0>(p), get<1>(p));
     if (pc->getStatus()) {
-<<<<<<< HEAD
 			pc->setAction("PC is poisoned by Potion to death.");
 			success = false;
-			
-  	}
-	}
-=======
-        pc->setAction("You are Dead.");
-	success = false;
      }
   }
->>>>>>> 3aa7e9247108528668644c03c5a7ad39a2efa5f5
   printFloor();
   return success;
-} 
+}

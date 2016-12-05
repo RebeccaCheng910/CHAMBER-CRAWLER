@@ -25,7 +25,8 @@ class Floor {
   std::shared_ptr<Player> pc;     // ptr to player character
   std::shared_ptr<Object> stair;
   std::vector<std::shared_ptr<Enemy>> enemies;   //ptr to 20 enemies
-  std::vector<std::shared_ptr<Gold>> golds;  // ptr to 10 golds
+  std::vector<std::shared_ptr<Enemy>> dragons;
+	std::vector<std::shared_ptr<Gold>> golds;  // ptr to 10 golds
   std::vector<std::shared_ptr<Potion>> potions;  // ptr to 10 potions
   bool visited[25][79] ={{false}};    // check if the floor tile is added to Chamger
   std::shared_ptr<TextDisplay> td;
@@ -33,10 +34,11 @@ class Floor {
   void generatePotion();
   void generateGold();
   void generateEnemy();
+  void generateDragon(int, int);
 
   void moveObject(int, int, int, int, char, const std::shared_ptr<Enemy>&);
   template<typename T> T find(int, int, std::vector<T>);
-  void enemiesAttack(int, int);
+  template<typename T> void enemiesAttack(int, int, std::vector<T>);
 public: 
   Floor(std::string); // constructor
   ~Floor();  // destructor

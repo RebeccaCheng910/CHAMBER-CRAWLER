@@ -126,34 +126,34 @@ void Floor::readFile(istream &in) {
       } else if (c == 'L') {
         enemies.emplace_back(make_shared<Enemy>(i, j));
         ++enemyCount;
-      } else if (c == 0) {  // Restore Health
+      } else if (c == '0') {  // Restore Health
         potions.emplace_back(make_shared<Potion>(i, j, 0));
 	++potionCount;
-      } else if (c == 1) {  // Boost Attack 
+      } else if (c == '1') {  // Boost Attack 
 	potions.emplace_back(make_shared<Potion>(i, j, 1));
 	++potionCount;
-      } else if (c == 2) {  // Boost Defence
+      } else if (c == '2') {  // Boost Defence
 	potions.emplace_back(make_shared<Potion>(i, j, 2));
 	++potionCount;
-      } else if (c == 3) {  // Poison Health
+      } else if (c == '3') {  // Poison Health
 	potions.emplace_back(make_shared<Potion>(i, j, 3));
 	++potionCount;
-      } else if (c == 4) {   // Wound Attack
+      } else if (c == '4') {   // Wound Attack
 	potions.emplace_back(make_shared<Potion>(i, j,  4));
 	++potionCount;
-      } else if (c == 5) {   // Wound Defence
+      } else if (c == '5') {   // Wound Defence
  	potions.emplace_back(make_shared<Potion>(i, j,  5));
 	++potionCount;
-      } else if (c == 6) {  // nomal gold pile
+      } else if (c == '6') {  // nomal gold pile
 	golds.emplace_back(make_shared<Gold>(i, j, 0));
 	++goldCount;
-      } else if (c == 7) {  // small hoard
+      } else if (c == '7') {  // small hoard
 	golds.emplace_back(make_shared<Gold>(i, j, 7));
 	++goldCount; 
-      } else if (c == 8) {  // merchant hoard
+      } else if (c == '8') {  // merchant hoard
         golds.emplace_back(make_shared<Gold>(i, j, 10));
 	++goldCount;
-	} else if (c == 9) {   // dragon hoard
+	} else if (c == '9') {   // dragon hoard
 				golds.emplace_back(make_shared<Gold>(i, j, 5));
         ++goldCount;
      }
@@ -206,9 +206,11 @@ void Floor::generateGold() {
     goldType = rand() % 8;
     golds.emplace_back(make_shared<Gold>(0,0,goldType));
     theChambers[goldChamber]->generatePosition(golds[i].get());
+    if (golds[i]->getValue() == 6) {generateDragon(golds[i]->getInfo().row, golds[i]->getInfo().col);}
     td->setTD(golds[i]->getInfo().row, golds[i]->getInfo().col, golds[i]->getInfo().type);
   }
 }
+
 
 // generate enemies without specialized type
 void Floor::generateEnemy() {
@@ -223,6 +225,19 @@ void Floor::generateEnemy() {
    }
  }
 
+// generate dragons and store in a vector 
+void Floor::generateDragon(int x, int y) {
+  for (int i = x-1; i <= x+1; ++i) {
+		for (int j = y-1; j <= y+1; ++j) {
+			if (td->getTD(i, j) == '.') {
+				dragons.emplace_back(make_shared<Enemy>(i,j));
+				td->setTD(i, j, 'D');
+        return;
+			}
+		}
+	}
+}
+
 // find pointer in a vector given row and col
 template<typename T> T Floor::find(int row, int col, vector<T> v) {
    for (auto it = v.begin(); it != v.end(); ++it) {
@@ -234,7 +249,7 @@ template<typename T> T Floor::find(int row, int col, vector<T> v) {
    } 
     return nullptr;
 }
-
+				
  
 // move all enemies starts from leftmost and upmost
 void Floor::moveEnemy(int x, int y) {
@@ -305,17 +320,18 @@ void Floor::moveEnemy(int x, int y) {
 }
 
 // check player in range for attack 
-void Floor::enemiesAttack(int x, int y) {
+template<typename T> void Floor::enemiesAttack(int x, int y, vector<T> v) {
 	for (int i = x-1;i <= x+1; ++i) {
 		for (int j = y-1; j <= y+1; ++j) {
-			shared_ptr <Enemy> e = find<shared_ptr<Enemy>>(i, j, enemies);
+			shared_ptr <Enemy> e = find<shared_ptr<Enemy>>(i, j, v);
 			if (e) {
 				pc->beAttackedBy(e);
-				return;
-			}
-		}
+        return;
+		  }
+		} 
 	}
 } 
+
 
 // move pc according to command of game players (no, so, ea, we,ne, nw, se, sw) 
 void Floor::movePlayer(int new_x, int new_y, string dir) {
@@ -340,9 +356,10 @@ void Floor::movePlayer(int new_x, int new_y, string dir) {
         else if (val == 1) name = "small hoard";
         else if (val == 5) name = "dragon hoard";
         else if (val == 4) name = "merchant hoard";
+        g = nullptr;
         actionStr = "A " + name + " is picked up. ";
 			}
-			else return;   // dragon hoard
+			else {enemiesAttack(x, y, dragons);}
     }
     td->setTD(x + new_x, y + new_y, '@');
 		char original = theGrid[x][y]->getInfo().type;
@@ -350,17 +367,31 @@ void Floor::movePlayer(int new_x, int new_y, string dir) {
     pc->setCords(x + new_x, y + new_y);
 		actionStr += "PC moves " + dir;
 		pc->setAction(actionStr);
+		moveEnemy(0,0);
 		for (int i = x+new_x-1; i <= x+new_x+1; ++i) {
 			for (int j = y+new_y-1; j <= y+new_y+1; ++j) {
-     	if (td->getTD(i,j) == 'P') {
-        	pc->setAction(pc->getAction() + " and sees an unknown portion.");
-        	return;
-			}
-			}
+			  if (td->getTD(i,j) == 'G') {
+				  shared_ptr <Gold> g = find<shared_ptr<Gold>>(i, j, golds);
+				  if (g->getGold() == true) {      // if PC is within 1 radius of dragon hoard
+				  pc->setAction(pc->getAction() + " and attacked by a nearby Dragon. ");
+					enemiesAttack(i, j, dragons);
+          return;
+				  }
+			  } else if (td->getTD(i,j) == 'D') {       // if PC is within 1 radius of dragon 
+					pc->setAction(pc->getAction() + ". ");
+					enemiesAttack(i, j, dragons); 
+					return;
+        }
+				if (td->getTD(i,j) == 'P') {
+          pc->setAction(pc->getAction() + " and sees an unknown portion");
+          break; 
+				}
+		  } 
 		}
+		
 		pc->setAction(pc->getAction() + ". ");
-		moveEnemy(0,0);
-    enemiesAttack(x + new_x, y + new_y);
+    enemiesAttack(x + new_x, y + new_y, enemies);
+    
 	} else pc->setAction("Invalid direction, PC's way is blocked.");
 }
 
@@ -378,14 +409,21 @@ void Floor::moveObject(int old_x, int old_y, int new_x, int new_y, char symbol, 
 void Floor::attack(int x, int y) {
 	int row = pc->getInfo().row;
   int col = pc->getInfo().col;
-	shared_ptr <Enemy> e = find<shared_ptr<Enemy>>(row+x, col+y, enemies);
+  shared_ptr <Enemy> e;
+  if (td->getTD(row+x, col+y) == 'G') {
+		e = find<shared_ptr<Enemy>>(row+x, col+y,dragons);
+  } else { 
+	  e = find<shared_ptr<Enemy>>(row+x, col+y, enemies);
+	}
 	if (e) { 
 		bool dead = e->beAttackedBy(pc);
+    
 		if (dead) {
-			pc->setAction(pc->getAction() + "Enemy is slained.");
+			pc->setAction(pc->getAction() + e->getInfo().type + " is slained.");
 			td->setTD(e->getInfo().row, e->getInfo().col, '.'); 
 			e = nullptr;
 		} else {
+      moveEnemy(x, y);
 			pc->beAttackedBy(e);
 		}
 	} 

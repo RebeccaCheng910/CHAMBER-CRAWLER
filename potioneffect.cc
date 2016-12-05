@@ -29,3 +29,5 @@ PotionEffect::PotionEffect(int type, shared_ptr<Player> p): Decorator{p} {
 int PotionEffect::getHP() {return HP;}
 int PotionEffect::getAtk() {return component->getAtk() + effectAtk;}
 int PotionEffect::getDef() {return component->getDef() + effectDef;}
+
+shared_ptr<Player> PotionEffect::getBase() {return component->getBase();}

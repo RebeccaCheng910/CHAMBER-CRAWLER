@@ -1,5 +1,8 @@
 #include "shade.h"
 #include "player.h"
+#include <memory> 
+
+using namespace std;
 
 // constructor
 Shade::Shade(): Player() {
@@ -8,6 +11,10 @@ Shade::Shade(): Player() {
   Def = 25;
   race = "Shade";
   maxHP = 125;
+}
+
+shared_ptr<Player> Shade::getBase() {
+	return shared_from_this();
 }
 
 //int Shade::getHP() {return HP;}
