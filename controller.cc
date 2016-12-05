@@ -108,34 +108,32 @@ void Controller::printFloor() {
   cout << "Action: " << pc->getAction() << endl;
 }
 
-void Controller::move(string direction) {
+bool Controller::move(string direction) {
   tuple<int,int,string> p = convert_direc(direction);
   try {
   	floor->movePlayer(get<0>(p), get<1>(p), get<2>(p));
   } catch( const int n) {  // pc reaches staircase
     ++floorNum;
-                  //
   }
+  
+  if (pc->getStatus()) {pc->setAction("PC is defeated by Dragon.");}
   printFloor();
+  return (!pc->getStatus());
 }
 
 // attack enemy in gievn direction 
 bool Controller::attack(string direction) {
   tuple<int, int, string> p = convert_direc(direction);
-  bool success = true;
     if (get<0>(p) == 0 && get<1>(p) == 0) {
       pc->setAction("Invalid direction");
     }  else {
 		floor->attack(get<0>(p), get<1>(p));
-    if (!pc->getStatus()) {
-    	floor->moveEnemy(get<0>(p), get<1>(p));
-		} else {
+    if (pc->getStatus()) {
 			pc->setAction("PC is defeated by Enemy.");
-			success = false;
 		}
 	}
 	printFloor();
-  return success;
+  return (!pc->getStatus());
 }
 
 
