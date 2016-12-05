@@ -121,7 +121,7 @@ bool Controller::move(string direction) {
   return (!pc->getStatus());
 }
 
-// attack enemy in gievn direction 
+// attack enemy in given direction 
 bool Controller::attack(string direction) {
   tuple<int, int, string> p = convert_direc(direction);
     if (get<0>(p) == 0 && get<1>(p) == 0) {
