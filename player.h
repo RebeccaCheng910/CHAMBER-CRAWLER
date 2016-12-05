@@ -11,10 +11,16 @@ class Enemy;
 class Player: public Character {
   int goldValue = 0;
   std::string action;
+<<<<<<< HEAD
+	bool isDead = false;
+protected:
+  int maxHP;
+=======
   bool isDead = false;
 protected:
   int maxHP;
 
+>>>>>>> 3aa7e9247108528668644c03c5a7ad39a2efa5f5
 public:
   Player(); // constructor
  // int getHP() override;
