@@ -118,6 +118,14 @@ bool Controller::move(string direction) {
     floor->movePlayer(get<0>(p), get<1>(p), get<2>(p));
   } catch( const int n) {  // pc reaches staircase
     ++floorNum;
+    // Player leaves 5th floor. 
+    if (floorNum > 5) {
+			floorNum = 5;
+			pc->setAction("PC has won. Contratulations!");
+      printFloor();
+			return false;
+		}
+			
     // create a new board
     floor = make_shared<Floor>(file);
     floor->setPlayer(pc);   // set floor's PC
