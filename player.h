@@ -9,7 +9,7 @@ class Enemy;
 
 // abstract class
 class Player: public Character {
-  int goldValue = 0;
+  int goldValue;
   std::string action;
 	bool isDead = false;
 protected:
@@ -21,6 +21,7 @@ public:
 //  int getDef() override;
   std::string getAction();
   void setAction(std::string);
+  void setHP(int n);
   virtual int getGold();   // goblin needs to overload
   virtual void setGold(int); 
   virtual bool getStatus();   

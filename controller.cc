@@ -7,6 +7,10 @@
 #include "character.h"
 #include "shade.h"
 #include <tuple>
+#include "drow.h"
+#include "vampire.h"
+#include "troll.h"
+#include "goblin.h"
 
 using namespace std;
 
@@ -69,13 +73,13 @@ Controller::~Controller() {
 // set a PC with no specialized type
 void Controller::setRace(char c) {
   if (c == 'd') {
-    pc = make_shared<Shade>(); //
+    pc = make_shared<Drow>(); //
   } else if ( c == 'v') {
-    pc = make_shared<Shade>();  //
+    pc = make_shared<Vampire>();  //
   } else if (c == 't') {
-    pc = make_shared<Shade>();
+    pc = make_shared<Troll>();
   } else if (c == 'g') {
-    pc = make_shared<Shade>();
+    pc = make_shared<Goblin>();
   } else {        // use Shade as default
     pc = make_shared<Shade>();
   }
@@ -111,11 +115,17 @@ void Controller::printFloor() {
 bool Controller::move(string direction) {
   tuple<int,int,string> p = convert_direc(direction);
   try {
-  	floor->movePlayer(get<0>(p), get<1>(p), get<2>(p));
+    floor->movePlayer(get<0>(p), get<1>(p), get<2>(p));
   } catch( const int n) {  // pc reaches staircase
     ++floorNum;
+    // create a new board
     floor = make_shared<Floor>(file);
+    floor->setPlayer(pc);   // set floor's PC
+    setBoard();
+    floor = make_shared<Floor>(file);
+    int temp_HP = pc->getHP();
     pc = pc->getBase();
+    pc->setHP(temp_HP);
     floor->setPlayer(pc);
     setBoard();
     pc->setAction("PC reaches a new floor.");
@@ -144,7 +154,7 @@ bool Controller::attack(string direction) {
 // use potion in direction
 bool Controller::usePotion(string direction)  {
   tuple<int, int, string> p = convert_direc(direction);
-	bool success = true;
+  bool success = true;
   if (get<0>(p) == 0 && get<1>(p) == 0) {
     pc->setAction("Invalid direction");
   } else {
