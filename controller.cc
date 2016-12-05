@@ -114,8 +114,11 @@ bool Controller::move(string direction) {
   	floor->movePlayer(get<0>(p), get<1>(p), get<2>(p));
   } catch( const int n) {  // pc reaches staircase
     ++floorNum;
+    pc = pc->getBase();
+    floor->setPlayer(pc);
+    setBoard();
+    pc->setAction("PC reaches a new floor.");
   }
-  
   if (pc->getStatus()) {pc->setAction("PC is defeated by Dragon.");}
   printFloor();
   return (!pc->getStatus());

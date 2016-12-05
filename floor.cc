@@ -126,34 +126,34 @@ void Floor::readFile(istream &in) {
       } else if (c == 'L') {
         enemies.emplace_back(make_shared<Enemy>(i, j));
         ++enemyCount;
-      } else if (c == 0) {  // Restore Health
+      } else if (c == '0') {  // Restore Health
         potions.emplace_back(make_shared<Potion>(i, j, 0));
 	++potionCount;
-      } else if (c == 1) {  // Boost Attack 
+      } else if (c == '1') {  // Boost Attack 
 	potions.emplace_back(make_shared<Potion>(i, j, 1));
 	++potionCount;
-      } else if (c == 2) {  // Boost Defence
+      } else if (c == '2') {  // Boost Defence
 	potions.emplace_back(make_shared<Potion>(i, j, 2));
 	++potionCount;
-      } else if (c == 3) {  // Poison Health
+      } else if (c == '3') {  // Poison Health
 	potions.emplace_back(make_shared<Potion>(i, j, 3));
 	++potionCount;
-      } else if (c == 4) {   // Wound Attack
+      } else if (c == '4') {   // Wound Attack
 	potions.emplace_back(make_shared<Potion>(i, j,  4));
 	++potionCount;
-      } else if (c == 5) {   // Wound Defence
+      } else if (c == '5') {   // Wound Defence
  	potions.emplace_back(make_shared<Potion>(i, j,  5));
 	++potionCount;
-      } else if (c == 6) {  // nomal gold pile
+      } else if (c == '6') {  // nomal gold pile
 	golds.emplace_back(make_shared<Gold>(i, j, 0));
 	++goldCount;
-      } else if (c == 7) {  // small hoard
+      } else if (c == '7') {  // small hoard
 	golds.emplace_back(make_shared<Gold>(i, j, 7));
 	++goldCount; 
-      } else if (c == 8) {  // merchant hoard
+      } else if (c == '8') {  // merchant hoard
         golds.emplace_back(make_shared<Gold>(i, j, 10));
 	++goldCount;
-	} else if (c == 9) {   // dragon hoard
+	} else if (c == '9') {   // dragon hoard
 				golds.emplace_back(make_shared<Gold>(i, j, 5));
         ++goldCount;
      }

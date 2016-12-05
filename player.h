@@ -25,7 +25,8 @@ public:
   virtual void setGold(int); 
   virtual bool getStatus();   
   virtual void beAttackedBy(const std::shared_ptr<Enemy> &);
-  virtual ~Player() = 0;   // to make Player abstract
+  virtual std::shared_ptr<Player> getBase() = 0;
+	virtual ~Player() = 0;   // to make Player abstract
 };
 
 #endif

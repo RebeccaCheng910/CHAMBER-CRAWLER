@@ -16,6 +16,7 @@ public:
   int getHP() override;
   int getAtk() override;
   int getDef() override;
+  std::shared_ptr<Player> getBase() override;
 };
 
 #endif
