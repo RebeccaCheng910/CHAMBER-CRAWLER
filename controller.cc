@@ -119,7 +119,7 @@ void Controller::move(string direction) {
   printFloor();
 }
 
-// attack enemy in gievn direction 
+// attack enemy in given direction 
 bool Controller::attack(string direction) {
   tuple<int, int, string> p = convert_direc(direction);
   bool success = true;
