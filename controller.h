@@ -13,7 +13,7 @@ class Controller {
   std::shared_ptr<Player> pc;
 public:
   Controller(bool, std::string);  // constructor
-  ~Controller();  // dextructor
+  ~Controller();  // destructor
   void startGame(); // read in file, and initilize Floor
   void setRace(char);  // read from input and set race
   void setBoard();  // generate enemies and items
