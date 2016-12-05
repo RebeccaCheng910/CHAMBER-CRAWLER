@@ -11,6 +11,8 @@ class Chamber;
 class Character;
 class Player;
 class Enemy;
+class Dragon;
+class Human;
 class Gold;
 class Potion;
 

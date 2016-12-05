@@ -114,6 +114,7 @@ bool Controller::move(string direction) {
   	floor->movePlayer(get<0>(p), get<1>(p), get<2>(p));
   } catch( const int n) {  // pc reaches staircase
     ++floorNum;
+    floor = make_shared<Floor>(file);
     pc = pc->getBase();
     floor->setPlayer(pc);
     setBoard();
