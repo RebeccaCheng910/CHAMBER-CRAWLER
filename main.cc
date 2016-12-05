@@ -3,8 +3,19 @@
 #include <cstdlib>
 #include "controller.h"
 #include "time.h"
+#include <memory>
 using namespace std;
-	
+
+// construct controller and start a new game
+void newGame(Controller *controller) {
+	controller->startGame();
+	char race;
+	cin >> race;
+	controller->setRace(race);  // select race
+	controller->setBoard();   // generate enemies, golds and potions
+	controller->printFloor();
+}
+
 
 int main (int argc, char *argv[]) {
   cin.exceptions(ios::failbit|ios::eofbit);
@@ -19,15 +30,9 @@ int main (int argc, char *argv[]) {
     filename = argv[1];
     useDefault = false;
   }
-  
+
   Controller controller{useDefault, filename};
-  controller.startGame();
-  char race;
-  cin >> race;
-  controller.setRace(race);  // ask for race
-  controller.setBoard();     // generate enemies and items
-  
-  controller.printFloor();
+  newGame(&controller);
 
   // reads command
   string cmd,direction;
@@ -45,7 +50,11 @@ int main (int argc, char *argv[]) {
 			} else if (cmd == "a") {  // attack enemy
 				 cin >> direction;
 				 success = controller.attack(direction);
-      } else {
+      } else if (cmd == "q") return 1;
+        else if (cmd == "r") {
+					Controller controller{useDefault, filename};
+					newGame(&controller);
+			} else {
        	 cout << "Invalid Command"  << endl;
       }
 			if (!success) {
@@ -53,7 +62,10 @@ int main (int argc, char *argv[]) {
 				string choice;
 				cin >> choice;
 				if (choice == "q") return 1;
-        else if (choice == "r") {}
+        else if (choice == "r") {
+					Controller controller{useDefault, filename};
+          newGame(&controller);
+				}
 			}		
     } 
   } catch(ios::failure) { } 

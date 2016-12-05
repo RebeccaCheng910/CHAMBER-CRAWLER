@@ -50,6 +50,10 @@ void Controller::startGame() {
   for (int i = 0; i < 10; ++i) {
     cout << endl;
   }
+  cout << "Welcome to CC3K." << endl;
+  for (int i = 0; i < 5; ++i) {
+    cout << endl;
+	}
   cout << "Please choose a race" << endl;
   cout << "s - Shade" << endl;
   cout << "d - Drow" << endl;
@@ -122,11 +126,6 @@ bool Controller::attack(string direction) {
     if (get<0>(p) == 0 && get<1>(p) == 0) {
       pc->setAction("Invalid direction");
     }  else {
-	floor->attack(get<0>(p), get<1>(p));
-        if (!pc->getStatus()) {
-    	  floor->moveEnemy(get<0>(p), get<1>(p));
-	} else {
-<<<<<<< HEAD
 		floor->attack(get<0>(p), get<1>(p));
     if (!pc->getStatus()) {
     	floor->moveEnemy(get<0>(p), get<1>(p));
@@ -137,14 +136,6 @@ bool Controller::attack(string direction) {
 	}
 	printFloor();
   return success;
-=======
-       	  pc->setAction("You are Dead.");
-	  success = false;
-        }
-      }
-      printFloor();
-      return success;
->>>>>>> 3aa7e9247108528668644c03c5a7ad39a2efa5f5
 }
 
 
@@ -157,18 +148,10 @@ bool Controller::usePotion(string direction)  {
   } else {
     pc = floor->usePotion(get<0>(p), get<1>(p));
     if (pc->getStatus()) {
-<<<<<<< HEAD
 			pc->setAction("PC is poisoned by Potion to death.");
 			success = false;
-			
-  	}
-	}
-=======
-        pc->setAction("You are Dead.");
-	success = false;
      }
   }
->>>>>>> 3aa7e9247108528668644c03c5a7ad39a2efa5f5
   printFloor();
   return success;
-} 
+}
