@@ -1,1 +1,0 @@
-human.o: human.cc human.h enemy.h character.h object.h objectType.h
