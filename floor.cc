@@ -254,16 +254,17 @@ void Floor::generateDragon(int x, int y) {
 			if (td->getTD(i, j) == '.') {
 				dragons.emplace_back(make_shared<Dragon>(i,j,'D'));
 				shared_ptr <Gold> g = find<shared_ptr<Gold>>(x, y, golds);
-				shared_ptr <Dragon> d = find<shared_ptr<Dragon>>(i, j, dragons);
-				if (g) d->setHoard(g);
-				td->setTD(i, j, 'D');
-        return;
-			}
+				     shared_ptr <Dragon> d = find<shared_ptr<Dragon>>(i, j, dragons);
+				     if (g) d->setHoard(g);
+				     td->setTD(i, j, 'D');
+             return;
+			    }
+		  } 
 		}
-	}
 }
-
+ 
 // find pointer in a vector given row and col
+
 template<typename T> T Floor::find(int row, int col, vector<T> v) {
    for (auto it = v.begin(); it != v.end(); ++it) {
 		if ((*it) == nullptr) break;
@@ -537,7 +538,8 @@ void Floor::attack(int x, int y) {
      			bool dead = g->beAttackedBy(pc);
      			if (dead) {
 						pc->setAction(pc->getAction() + g->getInfo().type + " is slained.");
-     			 //  g->getHoard()->setGold(false);
+     			  shared_ptr<Gold> d = g->getHoard();
+						if (d) d->setGold(false);
 						td->setTD(row+x, col+y, '.');
      		  } else {
 					 	 moveEnemy(0,0);
